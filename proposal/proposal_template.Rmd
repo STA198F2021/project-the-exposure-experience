@@ -8,13 +8,16 @@ output: pdf_document
 
 # Load Packages
 
-```{r load-packages}
+```{r load-packages, warning=FALSE, message=FALSE, echo=FALSE}
 library(tidyverse)
+library(readr)
+death_rates_total_air_pollution <- read_csv("~/R/Project Proposal/data/death-rates-total-air-pollution.csv")
+death_rates_from_air_pollution <- read_csv("~/R/Project Proposal/data/death-rates-from-air-pollution.csv")
+number_of_deaths_by_risk_factor <- read_csv("~/R/Project Proposal/data/number-of-deaths-by-risk-factor.csv")
 ``` 
 
 # Load Data
 ```{r loaddata}
-
 ```
 
 # Introduction and Data, including Research Questions
@@ -28,17 +31,43 @@ The data collection is a bit complicated. In order to estimate deaths caused by 
 
 # Glimpse
 
-```{r glimpse}
-#inbetween <- death_rates_total_air_pollution %>%
- # left_join(death_rates_from_air_pollution, id = Entity)
+```{r glimpse, warning=FALSE, message=FALSE}
+inbetween <- death_rates_total_air_pollution %>%
+  left_join(death_rates_from_air_pollution, id = Entity)
 
-#joineddata <- inbetween %>%
-  #left_join(number_of_deaths_by_risk_factor, id = Entity)
+joineddata <- inbetween %>%
+  left_join(number_of_deaths_by_risk_factor, id = Entity)
 
-#glimpse(joineddata)
+glimpse(joineddata)
 ```
 
 # Data Analysis Plan
 
 (Specify the outcome (response, Y) and predictor (explanatory, X) variables you will use to answer your question, as well as the comparison groups you will use, if applicable. You may include very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. Note the statistical method(s) that you believe will be useful in answering your question(s). 
 What results from these specific statistical methods are needed to support your hypothesized answer?)
+
+```{r prelimdata, warning=FALSE, message=FALSE, echo=FALSE}
+joineddata %>%
+    filter(Entity %in% c("Saudi Arabia", "Germany", "Canada", "Spain", "United States")) %>%
+    ggplot(mapping = aes (x = Year, y = `Deaths - Ambient ozone pollution - Sex: Both - Age: Age-standardized (Rate)`, width = 3, height = 3)) +
+    theme(axis.text.x = element_text(angle=70, hjust=1)) +
+    geom_line() +
+    facet_wrap(~Entity, ncol = 3) +
+    labs (x = "Months",
+    y = "Count of Births",
+    title = "Average Ozone Deaths")
+```
+
+
+```{r, echo=FALSE}
+joineddata %>%
+  filter(Entity %in% c("India", "China", "North Korea")) %>%
+    ggplot(mapping = aes (x = Year, y = `Deaths - Ambient ozone pollution - Sex: Both - Age: Age-standardized (Rate)`, width = 3, height = 3)) +
+    theme(axis.text.x = element_text(angle=70, hjust=1)) +
+    geom_line() +
+    facet_wrap(~Entity, ncol = 3) +
+    labs (x = "Months",
+    y = "Count of Births",
+    title = "Monthly Birth Averages (2016-2021)")
+```
+
