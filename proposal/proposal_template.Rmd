@@ -46,22 +46,10 @@ glimpse(joineddata)
 (Specify the outcome (response, Y) and predictor (explanatory, X) variables you will use to answer your question, as well as the comparison groups you will use, if applicable. You may include very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. Note the statistical method(s) that you believe will be useful in answering your question(s). 
 What results from these specific statistical methods are needed to support your hypothesized answer?)
 
-```{r prelimdata, warning=FALSE, message=FALSE, echo=FALSE}
-joineddata %>%
-    filter(Entity %in% c("Saudi Arabia", "Germany", "Canada", "Spain", "United States")) %>%
-    ggplot(mapping = aes (x = Year, y = `Deaths - Ambient ozone pollution - Sex: Both - Age: Age-standardized (Rate)`, width = 3, height = 3)) +
-    theme(axis.text.x = element_text(angle=70, hjust=1)) +
-    geom_line() +
-    facet_wrap(~Entity, ncol = 3) +
-    labs (x = "Months",
-    y = "Count of Births",
-    title = "Average Ozone Deaths")
-```
 
-
-```{r, echo=FALSE}
+```{r prelimdata, echo=FALSE}
 joineddata %>%
-  filter(Entity %in% c("India", "China", "North Korea")) %>%
+  filter(Entity %in% c("India", "China", "North Korea", "Nepal")) %>%
     ggplot(mapping = aes (x = Year, y = `Deaths - Ambient ozone pollution - Sex: Both - Age: Age-standardized (Rate)`, width = 3, height = 3)) +
     theme(axis.text.x = element_text(angle=70, hjust=1)) +
     geom_line() +
