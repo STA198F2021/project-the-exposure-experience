@@ -43,19 +43,19 @@ glimpse(joineddata)
 
 # Data Analysis Plan
 
-(Specify the outcome (response, Y) and predictor (explanatory, X) variables you will use to answer your question, as well as the comparison groups you will use, if applicable. You may include very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. Note the statistical method(s) that you believe will be useful in answering your question(s). 
-What results from these specific statistical methods are needed to support your hypothesized answer?)
+For our plan, we are looking at several different predictors, mostly focusing on different types of air pollution (household, ambient matter, and ozone) and the outcomes we are looking at deaths. We will compare the different types of air pollution among each other and to other risk factors/predictors. Down below we created a four graphs that examine the trends of ozone related deaths in four different countries. In general there seems to be a downward trend with deaths associated with household air pollution, which makes sense as household air pollution has been decreasing due to alternative clean fuel options being introduced. We would like to see if that trend remains true in other countries and among other types of air pollution.
 
+Our null hypothesis is that air pollution has a bigger effect on mortality than other risk factors. As for statistical methods we would like to further explore the difference in proportion of deaths due to air pollution and the proportion of deaths due to other risk factors, using a simulation-based two-sample t-test to check if we can reject the null hypothesis at the 95% confidence level. We would also like to perform chi-squared test to check for independence between risk factors/predictors. 
 
 ```{r prelimdata, echo=FALSE}
 joineddata %>%
   filter(Entity %in% c("India", "China", "North Korea", "Nepal")) %>%
-    ggplot(mapping = aes (x = Year, y = `Deaths - Ambient ozone pollution - Sex: Both - Age: Age-standardized (Rate)`, width = 3, height = 3)) +
+    ggplot(mapping = aes (x = Year, y = `Deaths - Household air pollution from solid fuels - Sex: Both - Age: Age-standardized (Rate)`, width = 3, height = 3)) +
     theme(axis.text.x = element_text(angle=70, hjust=1)) +
     geom_line() +
     facet_wrap(~Entity, ncol = 3) +
-    labs (x = "Months",
-    y = "Count of Births",
-    title = "Monthly Birth Averages (2016-2021)")
+    labs (x = "Years",
+    y = "Count of Deaths",
+    title = "Yearly Death Averages due to Ambient Ozone Pollution (1990-2017)")
 ```
 
