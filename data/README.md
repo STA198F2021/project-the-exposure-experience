@@ -10,7 +10,8 @@ The codebook for your data file(s) using the following format.
 
 |variable         |description |
 |:----------------|:-----------|
-|variable1        | Description of variable 1 |
-|variable2        | Description of variable 2 |
-|variable3        | Description of variable 3 |
-|...              | ... |
+|Country        | Country of interest |
+|Year        | Year of interest |
+|Deaths - Air Pollution        | This was deaths by air pollution with age standarized and both sexes present |
+|Deaths - Household air pollution from solid fuels | This was deaths by air pollutants produced when solid materials that are burnt indoors|
+|Deaths - Ambient particulate matter pollution | This was deaths by air pollution with age standarized and both sexes present |
