@@ -55,7 +55,7 @@ joineddata %>%
     geom_line() +
     facet_wrap(~Entity, ncol = 3) +
     labs (x = "Years",
-    y = "Count of Deaths",
-    title = "Yearly Death Averages due to Ambient Ozone Pollution (1990-2017)")
+    y = "Rate of Deaths",
+    title = "Yearly Death Rates due to Ambient Ozone Pollution (1990-2017)")
 ```
 
