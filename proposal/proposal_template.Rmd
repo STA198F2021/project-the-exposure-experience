@@ -43,7 +43,7 @@ glimpse(joineddata)
 
 # Data Analysis Plan
 
-For our plan, we are looking at several different predictors, mostly focusing on different types of air pollution (household, ambient matter, and ozone) and the outcomes we are looking at are deaths. We will compare the different types of air pollution to each other and to other risk factors/predictors. Down below we created four graphs that examine the trends of ozone related deaths in four different countries. In general there seems to be a downward trend with deaths associated with household air pollution, which makes sense as household air pollution has been decreasing with the introduction of alternative clean fuel options. We would like to see if that trend remains true in other countries and among other types of air pollution. We didn't do the rate because there wasn't any population data within this data set. We may want to use some population data in order to better compare death by country (calculating death rates)
+For our plan, we are looking at several different predictors, mostly focusing on different types of air pollution (household, ambient matter, and ozone) and the outcomes we are looking at are deaths. We will compare the different types of air pollution to each other and to other risk factors/predictors. There will likely be a lot of correlation between the variables, so we would like to look into their interrelationships. Down below we created four graphs that examine the trends of ozone related deaths in four different countries. In general there seems to be a downward trend with deaths associated with household air pollution, which makes sense as household air pollution has been decreasing with the introduction of alternative clean fuel options. We would like to see if that trend remains true in other countries and among other types of air pollution. We didn't do the rate because there wasn't any population data within this data set. We may want to use some population data in order to better compare death by country (calculating death rates)
 .
 Our null hypothesis is that air pollution has a bigger effect on mortality than other risk factors. As for statistical methods we would like to further explore the difference in proportion of deaths due to air pollution and the proportion of deaths due to other risk factors, using a simulation-based two-sample t-test to check if we can reject the null hypothesis at the 95% confidence level. We would also like to perform chi-squared test to check for independence between risk factors/predictors. These are needed to check if the predictors are interacting with each other.
 
@@ -59,3 +59,6 @@ joineddata %>%
     title = "Yearly Death Counts due to Household Air Pollution (1990-2017)")
 ```
 
+# What We Fixed
+
+We got points off for having the wrong labels. So we fixed the labels from rates to counts since we do not have population data. We also added a bit more to our data analysis plan, explaining that we may need population data.
