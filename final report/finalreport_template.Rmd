@@ -18,6 +18,25 @@ Climate change has been a recurring topic in the news in recent years as it beco
 
 In general we would like to investigate air pollution as a cause of mortality globally. There are several different types of air pollution, but we will look at household pollution, ambient matter pollution, and ambient ozone pollution. With these variables we will compare them to see which air pollution is the most dangerous. We would also like to look into the trend of air pollution over the last 27 years. Lastly we would like to compare air pollution as a risk factor to other common risk factors. We downloaded this data from kaggle. There are several variables in this data including year, country, deaths by each type of air pollution, and deaths by other risk factors. 
 
-The data collection is a bit complicated. In order to estimate deaths caused by pollution they use “mathematical functions, derivved from epidemiological studies from countries around the world, that relate different levels of exposure to the increased risk of death or disability from each cause, by age and sex, where applicable, estimates of population exposure to PM2.5, ozone, and household air pollution, country-specific data on underlying rates of disease and death for each pollution-linked disease, and a comprehensive set of population data, adjusted to match the UN2015 Population Prospectus and obtained from the Gridded Population of the World (GPW) database for each country” (https://www.stateofglobalair.org/data/estimate-burden).
+The data collection is a bit complicated. In order to estimate deaths caused by pollution they use “mathematical functions, derived from epidemiological studies from countries around the world, that relate different levels of exposure to the increased risk of death or disability from each cause, by age and sex, where applicable, estimates of population exposure to PM2.5, ozone, and household air pollution, country-specific data on underlying rates of disease and death for each pollution-linked disease, and a comprehensive set of population data, adjusted to match the UN2015 Population Prospectus and obtained from the Gridded Population of the World (GPW) database for each country” (https://www.stateofglobalair.org/data/estimate-burden).
 
+```{r joiningdata}
+inbetween <- death_rates_total_air_pollution %>%
+  left_join(death_rates_from_air_pollution, id = Entity)
+joineddata <- inbetween %>%
+  left_join(number_of_deaths_by_risk_factor, id = Entity)
+```
+
+```{r}
+joineddata %>%
+  filter(Entity %in% c("Papua New Guinea", "Afghanistan", "Laus" )) %>%
+  ggplot(aes(x = 'Deaths - Household air pollution from solid fuels - Sex: Both - Age: Age-standardized (Rate)', y = 'Air pollution')) +
+    geom_point(alpha = 0.5) +
+    labs(
+      title = "Hair mercury as a function of standarized assets",
+      subtitle = "Peruvian Amazon by urban category",
+      x = "Standarized assets",
+      y = "Hair mercury (log ppm)") +
+    facet_wrap(~Entity)
+```
 
