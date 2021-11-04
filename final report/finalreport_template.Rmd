@@ -5,13 +5,16 @@ author: "Kaitlyn Lewars and Katie Meehl: The Exposure Experience"
 date: "November 16, 2021"
 output: pdf_document
 ---
-```{r loadp&d}
+```{r loadp&d, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(readr)
+library(scales)
 
-death_rates_total_air_pollution <- read_csv("~/R/Project Proposal/data/death-rates-from-air-pollution.csv")
-death_rates_from_air_pollution <- read_csv("~/R/Project Proposal/data/death-rates-total-air-pollution.csv")
-number_of_deaths_by_risk_factor <- read_csv("~/R/Project Proposal/data/number-of-deaths-by-risk-factor.csv")
+Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
 ```
 
 Climate change has been a recurring topic in the news in recent years as it becomes a more pressing problem. One of the important factors of climate change is air pollution. In 2017, air pollution was the 4th leading cause of mortality and the 5th leading cause of morbidity worldwide. As air pollution is a leading cause of morbidity and mortality, we thought it would be important to explore a data set investigating this problem. 
@@ -20,23 +23,33 @@ In general we would like to investigate air pollution as a cause of mortality gl
 
 The data collection is a bit complicated. In order to estimate deaths caused by pollution they use “mathematical functions, derived from epidemiological studies from countries around the world, that relate different levels of exposure to the increased risk of death or disability from each cause, by age and sex, where applicable, estimates of population exposure to PM2.5, ozone, and household air pollution, country-specific data on underlying rates of disease and death for each pollution-linked disease, and a comprehensive set of population data, adjusted to match the UN2015 Population Prospectus and obtained from the Gridded Population of the World (GPW) database for each country” (https://www.stateofglobalair.org/data/estimate-burden).
 
-```{r joiningdata}
-inbetween <- death_rates_total_air_pollution %>%
-  left_join(death_rates_from_air_pollution, id = Entity)
-joineddata <- inbetween %>%
-  left_join(number_of_deaths_by_risk_factor, id = Entity)
+```{r ex1, warning=FALSE, message=FALSE}
+Ambient_Air_Pollution_Rate %>%
+  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  ggplot(aes(x = FactValueNumeric)) +
+  geom_histogram(binwidth = 10) +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Ambient Air Pollution in 2016")
+
+Household_Air_Pollution_Rate %>%
+  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  ggplot(aes(x = FactValueNumeric)) +
+  geom_histogram(binwidth = 10) +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Household Air Pollution in 2016")
+
+Total_Air_Pollution_Death_Rate %>%
+  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  ggplot(aes(x = FactValueNumeric)) +
+  geom_histogram(binwidth = 10) +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Air Pollution in 2016")
 ```
 
-```{r}
-joineddata %>%
-  filter(Entity %in% c("Papua New Guinea", "Afghanistan", "Laus" )) %>%
-  ggplot(aes(x = 'Deaths - Household air pollution from solid fuels - Sex: Both - Age: Age-standardized (Rate)', y = 'Air pollution')) +
-    geom_point(alpha = 0.5) +
-    labs(
-      title = "Hair mercury as a function of standarized assets",
-      subtitle = "Peruvian Amazon by urban category",
-      x = "Standarized assets",
-      y = "Hair mercury (log ppm)") +
-    facet_wrap(~Entity)
-```
-
+The four countries of interest are Demcratic People's Republic of Korea, Georgia, Chad, and Bosnia and Herzegovina.
