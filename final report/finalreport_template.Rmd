@@ -11,12 +11,12 @@ library(readr)
 library(scales)
 library(tidymodels)
 
-Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
-Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
-Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
-Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
-Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
-Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
+Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
 ```
 
 Climate change has been a recurring topic in the news in recent years as it becomes a more pressing problem. One of the important factors of climate change is air pollution. In 2017, air pollution was the 4th leading cause of mortality and the 5th leading cause of morbidity worldwide. As air pollution is a leading cause of morbidity and mortality, we thought it would be important to explore a data set investigating this problem. 
@@ -56,6 +56,7 @@ Total_Air_Pollution_Death_Rate %>%
 
 The four countries of interest are Democratic People's Republic of Korea, Georgia, Chad, and Bosnia and Herzegovina.
 
+[Explore these?]
 
 ```{r ex2, warning=FALSE, message=FALSE}
 joinedambient1 <- Ambient_Air_Pollution_Rate %>%
@@ -90,6 +91,7 @@ ambient %>%
   x = "Population Size",
   y = "Death")
 ```
+[Evaluate, explain, need to edit scale for both axes]
 
 ```{r ex7, warning=FALSE, message=FALSE}
 death_ambientairpol <- linear_reg() %>%
@@ -99,21 +101,25 @@ death_ambientairpol <- linear_reg() %>%
 ```
 deaths = -2601.0 + 274.1(AirConcentration)
 
+[evalue what this means]
+
 ```{r ex8, warning=FALSE, message=FALSE}
 ggplot(data = ambient, aes(x = AmbientAirConcentration, y = Totaldeathsambient)) +
   geom_point(alpha = 0.25) +
   geom_smooth(method = "lm", se = FALSE, color = "orange") +
-  labs(title = "Hair mercury as a function of age",
-       subtitle = "Peruvian Amazon",
-       x = "Age (years)",
-       y = "Hair mercury (log ppm)")
+  labs(title = "Deaths per Ambient Air Pollution Concentration",
+       x = "Ambient Air Pollution Concentration (Insert Units)",
+       y = "Total Deaths due to Ambient Air Pollution")
 ```
+[Add narrative about the graph - most deaths are concentrated at lower concentrations - lethal dose, what are the outliers?]
 
 ```{r ex9, warning=FALSE, message=FALSE}
 glance(death_ambientairpol)$r.squared
 ```
 
-```{r}
+[insert interpretation - 1.6% explained by linear reg]
+
+```{r ex10}
 ambient2 <- Particulate_Ambient_Concentration %>%
   rename(AmbientAirConcentration = FactValueNumeric) %>%
   select(Location, AmbientAirConcentration) %>%
@@ -124,7 +130,7 @@ filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"))
 
 
 
-```{r ex10, warning=FALSE, message=FALSE}
+```{r ex11, warning=FALSE, message=FALSE}
 death_ambientairpol_totalpopulation <- linear_reg() %>%
     set_engine("lm") %>%
     fit(Totaldeathsambient ~ AmbientAirConcentration + totalpopulation , data = ambient)
@@ -134,3 +140,8 @@ print(death_ambientairpol_totalpopulation)
 glance(death_ambientairpol_totalpopulation)$r.squared
 ```
 
+[Interpret, write formula, 96.5% variance explained]
+
+[T-tests]
+[Log regression?]
+[Country comparison?]
