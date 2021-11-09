@@ -91,11 +91,15 @@ ambient %>%
   y = "Death")
 ```
 
+
+For the next 4 sections we created two different models for a linear regression. The first one we did just based off the outdoor air concentration. The equation we got was deaths = -2601.0 + 274.1(AirConcentration). The air concentration is in PM2.5. 
+
+
 ```{r ex7, warning=FALSE, message=FALSE}
 death_ambientairpol <- linear_reg() %>%
   set_engine("lm") %>%
   fit(Totaldeathsambient ~ AmbientAirConcentration, data = ambient)
-  print(death_ambientairpol)
+  tidy(death_ambientairpol, conf.int=TRUE, exponentiate=TRUE)
 ```
 deaths = -2601.0 + 274.1(AirConcentration)
 
@@ -113,7 +117,7 @@ ggplot(data = ambient, aes(x = AmbientAirConcentration, y = Totaldeathsambient))
 glance(death_ambientairpol)$r.squared
 ```
 
-```{r}
+```{r ex10, warning=FALSE, message=FALSE}
 ambient2 <- Particulate_Ambient_Concentration %>%
   rename(AmbientAirConcentration = FactValueNumeric) %>%
   select(Location, AmbientAirConcentration) %>%
@@ -124,13 +128,17 @@ filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"))
 
 
 
-```{r ex10, warning=FALSE, message=FALSE}
+```{r ex11, warning=FALSE, message=FALSE}
 death_ambientairpol_totalpopulation <- linear_reg() %>%
     set_engine("lm") %>%
-    fit(Totaldeathsambient ~ AmbientAirConcentration + totalpopulation , data = ambient)
+    fit(Totaldeathsambient ~ AmbientAirConcentration + totalpopulation + Sex, data = ambient2)
 
-print(death_ambientairpol_totalpopulation)
+tidy(death_ambientairpol_totalpopulation, conf.int=TRUE, exponentiate=TRUE)
 
 glance(death_ambientairpol_totalpopulation)$r.squared
+```
+
+```{r ex12}
+t.test(Household_Air_Pollution_Rate$FactValueNumeric,Ambient_Air_Pollution_Rate$FactValueNumeric, var.equal = FALSE)
 ```
 
