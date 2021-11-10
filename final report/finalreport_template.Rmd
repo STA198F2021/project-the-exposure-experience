@@ -11,12 +11,19 @@ library(readr)
 library(scales)
 library(tidymodels)
 
-Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
-Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
-Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
-Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
-Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
-Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
+Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
+
+# Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
+# Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
+# Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
+# Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
+# Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
+# Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
 ```
 
 Climate change has been a recurring topic in the news in recent years as it becomes a more pressing problem. One of the important factors of climate change is air pollution. In 2017, air pollution was the 4th leading cause of mortality and the 5th leading cause of morbidity worldwide. As air pollution is a leading cause of morbidity and mortality, we thought it would be important to explore a data set investigating this problem. 
@@ -56,7 +63,58 @@ Total_Air_Pollution_Death_Rate %>%
 
 The four countries of interest are Democratic People's Republic of Korea, Georgia, Chad, and Bosnia and Herzegovina.
 
-[Explore these?]
+[Insert graph for N. Korea, Georgia, Chad, Bos. and Herz.]
+
+```{r Georgiatestgraphs}
+# These are the possible graphs I've made starter code for. I still need to work on them to get them to work but wanted to show you what I was talking about in terms of exploring these countries. Which graphs do you think we should use/would be most helpful in demonstrating effects of/comparison between air pollution? Any other graphs we should think about?
+
+# TRYING TO COMPARE RATES BELOW - Need to add x labels for countries
+Total_Air_Pollution_Death_Rate %>%
+  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  filter(Location %in% c("Georgia","Chad", "Democratic People's Republic of Korea","Bosnia and Herzegovina")) %>%
+  ggplot(aes(x = FactValueNumeric)) +
+  geom_histogram() +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Air Pollution in 2016")
+
+
+#COMPARE COUNTRY WITHIN REGION - Need to make this work [not showing anything]
+Total_Air_Pollution_Death_Rate %>%
+  filter(ParentLocation=="Europe") %>%
+  filter(Dim2=="Total", Dim1=="Both Sexes") %>%
+  ggplot(aes(x=FactValueNumeric)) +
+  geom_histogram() +
+  labs(x="Rate of Death (out of 100,000)",
+       y="Frequency",
+       title="Comparative Rates of Death due to Air Pollution",
+       subtitle="Europe")
+
+# COMPARE BETWEEN SEXES
+Total_Air_Pollution_Death_Rate %>%
+  filter(Location %in% c("Georgia")) %>%
+  filter(Dim2 == "Total") %>%
+  ggplot(aes(x = FactValueNumeric, fill=Dim1)) +
+  geom_bar() +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Air Pollution in 2016")
+
+# COMPARE ILLNESS CAUSED - Need to make this work [Not showing anything]
+Total_Air_Pollution_Death_Rate %>%
+  filter(Location %in% c("Georgia")) %>%
+  filter(Dim1=="Both Sexes") %>%
+  ggplot(aes(x = FactValueNumeric, fill=Dim2)) +
+  geom_bar() +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Air Pollution in 2016")
+
+```
+
+
 
 ```{r ex2, warning=FALSE, message=FALSE}
 joinedambient1 <- Ambient_Air_Pollution_Rate %>%
@@ -87,11 +145,13 @@ ambient %>%
   filter(!Location %in% c("China", "India")) %>%
   ggplot(aes(x = totalpopulation, y = Totaldeathsambient)) +
   geom_point(alpha = 0.25) +
+  scale_x_continuous(labels = label_comma()) +
+  scale_y_continuous(labels=label_comma()) +
   labs(title = "Death as a function of population size",
   x = "Population Size",
   y = "Death")
 ```
-[Evaluate, explain, need to edit scale for both axes]
+[Evaluate, explain]
 
 
 For the next 4 sections we created two different models for a linear regression. The first one we did just based off the outdoor air concentration. The equation we got was deaths = -2601.0 + 274.1(AirConcentration). The air concentration is in PM2.5. 
@@ -105,7 +165,7 @@ death_ambientairpol <- linear_reg() %>%
 ```
 deaths = -2601.0 + 274.1(AirConcentration)
 
-[evalue what this means]
+[evaluate what this means]
 
 ```{r ex8, warning=FALSE, message=FALSE}
 ggplot(data = ambient, aes(x = AmbientAirConcentration, y = Totaldeathsambient)) +
@@ -115,7 +175,7 @@ ggplot(data = ambient, aes(x = AmbientAirConcentration, y = Totaldeathsambient))
        x = "Ambient Air Pollution Concentration (Insert Units)",
        y = "Total Deaths due to Ambient Air Pollution")
 ```
-[Add narrative about the graph - most deaths are concentrated at lower concentrations - lethal dose, what are the outliers?]
+[Add narrative about the graph - most deaths are concentrated at mid concentrations - lethal dose, what are the outliers?]
 
 ```{r ex9, warning=FALSE, message=FALSE}
 glance(death_ambientairpol)$r.squared
@@ -147,5 +207,3 @@ glance(death_ambientairpol_totalpopulation)$r.squared
 ```{r ex12}
 t.test(Household_Air_Pollution_Rate$FactValueNumeric,Ambient_Air_Pollution_Rate$FactValueNumeric, var.equal = FALSE)
 ```
-
-[Interpret, write formula, 96.5% variance explained]
