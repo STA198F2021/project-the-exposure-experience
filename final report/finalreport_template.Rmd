@@ -11,6 +11,16 @@ library(readr)
 library(scales)
 library(tidymodels)
 library(knitr)
+library(infer)
+install.packages("janitor")
+library(janitor)
+
+#Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
+#Household_Air_Pollution_Total_Deaths <- read_csv("~/Project #Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
+#Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
+#Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
 
 Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
 Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
@@ -57,7 +67,58 @@ Total_Air_Pollution_Death_Rate %>%
 
 The four countries of interest are Democratic People's Republic of Korea, Georgia, Chad, and Bosnia and Herzegovina.
 
-[Explore these?]
+[Insert graph for N. Korea, Georgia, Chad, Bos. and Herz.]
+
+```{r Georgiatestgraphs}
+# These are the possible graphs I've made starter code for. I still need to work on them to get them to work but wanted to show you what I was talking about in terms of exploring these countries. Which graphs do you think we should use/would be most helpful in demonstrating effects of/comparison between air pollution? Any other graphs we should think about?
+
+# TRYING TO COMPARE RATES BELOW - Need to add x labels for countries
+Total_Air_Pollution_Death_Rate %>%
+  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  filter(Location %in% c("Georgia","Chad", "Democratic People's Republic of Korea","Bosnia and Herzegovina")) %>%
+  ggplot(aes(x = FactValueNumeric)) +
+  geom_histogram() +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Air Pollution in 2016")
+
+
+#COMPARE COUNTRY WITHIN REGION - Need to make this work [not showing anything]
+Total_Air_Pollution_Death_Rate %>%
+  filter(ParentLocation=="Europe") %>%
+  filter(Dim2=="Total", Dim1=="Both Sexes") %>%
+  ggplot(aes(x=FactValueNumeric)) +
+  geom_histogram() +
+  labs(x="Rate of Death (out of 100,000)",
+       y="Frequency",
+       title="Comparative Rates of Death due to Air Pollution",
+       subtitle="Europe")
+
+# COMPARE BETWEEN SEXES
+Total_Air_Pollution_Death_Rate %>%
+  filter(Location %in% c("Georgia")) %>%
+  filter(Dim2 == "Total") %>%
+  ggplot(aes(x = FactValueNumeric, fill=Dim1)) +
+  geom_bar() +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Air Pollution in 2016")
+
+# COMPARE ILLNESS CAUSED - Need to make this work [Not showing anything]
+Total_Air_Pollution_Death_Rate %>%
+  filter(Location %in% c("Georgia")) %>%
+  filter(Dim1=="Both Sexes") %>%
+  ggplot(aes(x = FactValueNumeric, fill=Dim2)) +
+  geom_bar() +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Air Pollution in 2016")
+
+```
+
+
 
 ```{r ex2, warning=FALSE, message=FALSE}
 joinedambient1 <- Ambient_Air_Pollution_Rate %>%
@@ -84,21 +145,21 @@ filter(CauseofDeath == "Total", Sex == "Both sexes")
 
 [Evaluate, explain, need to edit scale for both axes]
 
-```{r ex5}
+```{r ex4}
 ggplot(data = ambient, aes(x = log(Totaldeathsambient))) +
   geom_histogram() +
   labs(x = "Total Deaths (log)", y = NULL)
 ```
 
-```{r}
-ggplot(data = ambient, aes(x = AmbientAirConcentration, y = log(Totaldeathsambient))) +
+```{r ex5}
+ggplot(data = ambient, aes(x = log(AmbientAirConcentration), y = log(Totaldeathsambient))) +
 geom_point(alpha = 0.25) +
 labs(title = "Deaths as a function of Ambient Air Concentration",,
 x = "Ambient Air Concentration (PM2.5)",
 y = "Total deaths from Ambient Air Pollution (log)")
 ```
 
-```{r ex10, warning=FALSE, message=FALSE}
+```{r ex6, warning=FALSE, message=FALSE}
 ambient2 <- Particulate_Ambient_Concentration %>%
   rename(AmbientAirConcentration = FactValueNumeric) %>%
   rename(Residencetype = Dim1) %>%
@@ -108,7 +169,7 @@ ambient2 <- Particulate_Ambient_Concentration %>%
 filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"))
 ```
 
-```{r}
+```{r ex7}
 ggplot(data = ambient2, aes(x = Sex)) +
 geom_bar(alpha = 0.25) +
 labs(title = "Hair mercury as a function of age",
@@ -117,7 +178,9 @@ x = "Age (years)",
 y = "Hair mercury (log ppm)")
 ```
 
-```{r}
+[Evaluate, explain]
+
+```{r ex8}
 ggplot(data = ambient2, aes(x = log(totalpopulation), y = log(Totaldeathsambient))) +
 geom_point(alpha = 0.25) +
 labs(title = "Deaths as a function of Population",,
@@ -128,44 +191,63 @@ y = "Total Deaths from Ambient Air Pollution (log)")
 For the next 4 sections we created two different models for a linear regression. The first one we did just based off the outdoor air concentration. The equation we got was deaths = -2601.0 + 274.1(AirConcentration). The air concentration is in PM2.5. 
 
 
-```{r ex7, warning=FALSE, message=FALSE}
+```{r ex9, warning=FALSE, message=FALSE}
 death_ambientairpol <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(log(Totaldeathsambient) ~ AmbientAirConcentration, data = ambient)
+  fit(log(Totaldeathsambient) ~ log(AmbientAirConcentration), data = ambient)
   tidy(death_ambientairpol, conf.int=TRUE, exponentiate=TRUE)
 ```
 deaths = 4.979.0 + 0.0261(AirConcentration)
 
-[evalue what this means]
+[evaluate what this means]
 
-```{r ex8, warning=FALSE, message=FALSE}
-ggplot(data = ambient, aes(x = AmbientAirConcentration, y = Totaldeathsambient)) +
+```{r ex10, warning=FALSE, message=FALSE}
+ggplot(data = ambient, aes(x = log(AmbientAirConcentration), y = log(Totaldeathsambient))) +
   geom_point(alpha = 0.25) +
   geom_smooth(method = "lm", se = FALSE, color = "orange") +
   labs(title = "Deaths per Ambient Air Pollution Concentration",
        x = "Ambient Air Pollution Concentration (Insert Units)",
        y = "Total Deaths due to Ambient Air Pollution")
 ```
-[Add narrative about the graph - most deaths are concentrated at lower concentrations - lethal dose, what are the outliers?]
+[Add narrative about the graph - most deaths are concentrated at mid concentrations - lethal dose, what are the outliers?]
 
-```{r ex9, warning=FALSE, message=FALSE}
+```{r ex11, warning=FALSE, message=FALSE}
 glance(death_ambientairpol)$r.squared
 ```
 
 
-```{r ex11, warning=FALSE, message=FALSE}
+```{r ex12, warning=FALSE, message=FALSE}
 death_ambientairpol_totalpopulation <- linear_reg() %>%
     set_engine("lm") %>%
-    fit(log(Totaldeathsambient) ~ AmbientAirConcentration + Sex + Residencetype, data = ambient2)
+    fit(log(Totaldeathsambient) ~ log(AmbientAirConcentration) + Sex + Residencetype, data = ambient2)
 
 tidy(death_ambientairpol_totalpopulation, conf.int=TRUE, exponentiate=TRUE)
 
 glance(death_ambientairpol_totalpopulation)$r.squared
 ```
 
+```{r ex13}
+#Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
-```{r ex12}
-t.test(Household_Air_Pollution_Rate$FactValueNumeric,Ambient_Air_Pollution_Rate$FactValueNumeric, var.equal = FALSE)
+#modelagg<-glm(cbind(log(Totaldeathsambient), log(Alive)) ~ log(AmbientAirConcentration) + Sex + Residencetype, data=ambient2, family = binomial)
+
+
+#death_ambientairpol_totalpopulation <- logistic_reg() %>%
+  #set_engine("glm") %>%
+  #fit(log(Totaldeathsambient) ~ log(AmbientAirConcentration) + Sex + Residencetype, data=ambient2, family="binomial")
+
+#tidy(death_ambientairpol_totalpopulation, conf.int=TRUE, exponentiate=TRUE)
+
+#death_ambientairpol_totalpopulation_aug <- augment(death_ambientairpol_totalpopulation$fit)
+#ggplot(death_ambientairpol_totalpopulation_aug, mapping = aes(x = .fitted, y = .std.resid)) +
+  #geom_point(alpha = 0.5) +
+  #geom_hline(yintercept = 0, color = "gray", lty = "dashed") +
+  #labs(x = "Predicted mercury (ppm)", y = "Residuals")
+
+#glance(death_ambientairpol_totalpopulation)$r.squared
 ```
 
-[Interpret, write formula, 96.5% variance explained]
+
+```{r ex14}
+t.test(Household_Air_Pollution_Rate$FactValueNumeric,Ambient_Air_Pollution_Rate$FactValueNumeric, var.equal = FALSE)
+```
