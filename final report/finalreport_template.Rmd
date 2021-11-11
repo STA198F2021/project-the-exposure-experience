@@ -183,9 +183,9 @@ y = "Hair mercury (log ppm)")
 ```{r ex8}
 ggplot(data = ambient2, aes(x = log(totalpopulation), y = log(Totaldeathsambient))) +
 geom_point(alpha = 0.25) +
-labs(title = "Deaths as a function of Population",,
-x = "Total Population (per country log)",
-y = "Total Deaths from Ambient Air Pollution (log)")
+  labs(title = "Deaths as a function of Population",,
+        x = "Total Population (per country log)",
+        y = "Total Deaths from Ambient Air Pollution (log)")
 ```
 
 For the next 4 sections we created two different models for a linear regression. The first one we did just based off the outdoor air concentration. The equation we got was deaths = -2601.0 + 274.1(AirConcentration). The air concentration is in PM2.5. 
