@@ -32,7 +32,7 @@ Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient
 
 Climate change has been a recurring topic in the news in recent years as it becomes a more pressing problem. One of the important factors of climate change is air pollution. In 2017, air pollution was the 4th leading cause of mortality and the 5th leading cause of morbidity worldwide. As air pollution is a leading cause of morbidity and mortality, we thought it would be important to explore a data set investigating this problem. 
 
-In general we would like to investigate air pollution as a cause of mortality globally. There are several different types of air pollution, but we will look at household pollution, ambient matter pollution, and ambient ozone pollution. With these variables we will compare them to see which air pollution is the most dangerous. We would also like to look into the trend of air pollution over the last 27 years. Lastly we would like to compare air pollution as a risk factor to other common risk factors. We downloaded this data from kaggle. There are several variables in this data including year, country, deaths by each type of air pollution, and deaths by other risk factors. 
+In general we would like to investigate air pollution as a cause of mortality globally. There are several different types of air pollution, but we will look at household pollution and ambient matter pollution. With these two variables we will compare them to see which air pollution is the most fatal. We would also like to look into the trend of air pollution over the last 27 years. Lastly we would like to compare air pollution as a risk factor to other common risk factors. We downloaded this data from kaggle. There are several variables in this data including year, country, deaths by each type of air pollution, and deaths by other risk factors. 
 
 The data collection is a bit complicated. In order to estimate deaths caused by pollution they use “mathematical functions, derived from epidemiological studies from countries around the world, that relate different levels of exposure to the increased risk of death or disability from each cause, by age and sex, where applicable, estimates of population exposure to PM2.5, ozone, and household air pollution, country-specific data on underlying rates of disease and death for each pollution-linked disease, and a comprehensive set of population data, adjusted to match the UN2015 Population Prospectus and obtained from the Gridded Population of the World (GPW) database for each country” (https://www.stateofglobalair.org/data/estimate-burden).
 
@@ -73,48 +73,43 @@ The four countries of interest are Democratic People's Republic of Korea, Georgi
 # These are the possible graphs I've made starter code for. I still need to work on them to get them to work but wanted to show you what I was talking about in terms of exploring these countries. Which graphs do you think we should use/would be most helpful in demonstrating effects of/comparison between air pollution? Any other graphs we should think about?
 
 # TRYING TO COMPARE RATES BELOW - Need to add x labels for countries
-Total_Air_Pollution_Death_Rate %>%
-  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
-  filter(Location %in% c("Georgia","Chad", "Democratic People's Republic of Korea","Bosnia and Herzegovina")) %>%
-  ggplot(aes(x = FactValueNumeric)) +
-  geom_histogram() +
-  labs(x = "Rate of Death (out of 100,000)",
-       y = "Frequency",
-       title = "Rates of Death due to Air Pollution in 2016")
+#Total_Air_Pollution_Death_Rate %>%
+  #filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  #filter(Location %in% c("Georgia","Chad", "Democratic People's Republic of Korea","Bosnia and Herzegovina")) %>%
+  #ggplot(aes(x = FactValueNumeric)) +
+  #geom_histogram() +
+  #labs(x = "Rate of Death (out of 100,000)",
+       #y = "Frequency",
+       #title = "Rates of Death due to Air Pollution in 2016")
 
 
 #COMPARE COUNTRY WITHIN REGION - Need to make this work [not showing anything]
-Total_Air_Pollution_Death_Rate %>%
-  filter(ParentLocation=="Europe") %>%
-  filter(Dim2=="Total", Dim1=="Both Sexes") %>%
-  ggplot(aes(x=FactValueNumeric)) +
-  geom_histogram() +
-  labs(x="Rate of Death (out of 100,000)",
-       y="Frequency",
-       title="Comparative Rates of Death due to Air Pollution",
-       subtitle="Europe")
+#Total_Air_Pollution_Death_Rate %>%
+  #filter(ParentLocation=="Europe") %>%
+  #filter(Dim2=="Total", Dim1=="Both Sexes") %>%
+  ##ggplot(aes(x=FactValueNumeric)) +
+  #geom_histogram() +
+  #labs(x="Rate of Death (out of 100,000)", y="Frequency", title="Comparative Rates of Death due to Air Pollution", subtitle="Europe")
 
 # COMPARE BETWEEN SEXES
-Total_Air_Pollution_Death_Rate %>%
-  filter(Location %in% c("Georgia")) %>%
-  filter(Dim2 == "Total") %>%
-  ggplot(aes(x = FactValueNumeric, fill=Dim1)) +
-  geom_bar() +
-  scale_x_continuous(labels = label_comma()) +
-  labs(x = "Rate of Death (out of 100,000)",
-       y = "Frequency",
-       title = "Rates of Death due to Air Pollution in 2016")
+#Total_Air_Pollution_Death_Rate %>%
+  #filter(Location %in% c("Georgia")) %>%
+  #filter(Dim2 == "Total") %>%
+  #ggplot(aes(x = FactValueNumeric, fill=Dim1)) +
+ # geom_bar() +
+  #scale_x_continuous(labels = label_comma()) +
+  #labs(x = "Rate of Death (out of 100,000)",
+       #y = "Frequency",
+       #title = "Rates of Death due to Air Pollution in 2016")
 
 # COMPARE ILLNESS CAUSED - Need to make this work [Not showing anything]
-Total_Air_Pollution_Death_Rate %>%
-  filter(Location %in% c("Georgia")) %>%
-  filter(Dim1=="Both Sexes") %>%
-  ggplot(aes(x = FactValueNumeric, fill=Dim2)) +
-  geom_bar() +
-  scale_x_continuous(labels = label_comma()) +
-  labs(x = "Rate of Death (out of 100,000)",
-       y = "Frequency",
-       title = "Rates of Death due to Air Pollution in 2016")
+#Total_Air_Pollution_Death_Rate %>%
+  #filter(Location %in% c("Georgia")) %>%
+  #filter(Dim1=="Both Sexes") %>%
+  #ggplot(aes(x = FactValueNumeric, fill=Dim2)) +
+  #geom_bar() +
+  #scale_x_continuous(labels = label_comma()) +
+  #labs(x = "Rate of Death (out of 100,000)", y = "Frequency", title = "Rates of Death due to Air Pollution in 2016")
 
 ```
 
@@ -166,16 +161,7 @@ ambient2 <- Particulate_Ambient_Concentration %>%
   select(Location, AmbientAirConcentration, Residencetype) %>%
   left_join(joinedambient1, by = "Location") %>%
   select(Location, Sex, CauseofDeath, AmbientDeathRate, Totaldeathsambient, AmbientAirConcentration, totalpopulation, Residencetype) %>%
-filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"))
-```
-
-```{r ex7}
-ggplot(data = ambient2, aes(x = Sex)) +
-geom_bar(alpha = 0.25) +
-labs(title = "Hair mercury as a function of age",
-subtitle = "Peruvian Amazon",
-x = "Age (years)",
-y = "Hair mercury (log ppm)")
+filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"), !Residencetype %in% c("Total"))
 ```
 
 [Evaluate, explain]
@@ -226,28 +212,27 @@ tidy(death_ambientairpol_totalpopulation, conf.int=TRUE, exponentiate=TRUE)
 glance(death_ambientairpol_totalpopulation)$r.squared
 ```
 
+
+Here we created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration. (will add explanation later)
 ```{r ex13}
-#Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
+Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
-#modelagg<-glm(cbind(log(Totaldeathsambient), log(Alive)) ~ log(AmbientAirConcentration) + Sex + Residencetype, data=ambient2, family = binomial)
+modelagg1<-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration, data=ambient2, family = binomial)
 
-
-#death_ambientairpol_totalpopulation <- logistic_reg() %>%
-  #set_engine("glm") %>%
-  #fit(log(Totaldeathsambient) ~ log(AmbientAirConcentration) + Sex + Residencetype, data=ambient2, family="binomial")
-
-#tidy(death_ambientairpol_totalpopulation, conf.int=TRUE, exponentiate=TRUE)
-
-#death_ambientairpol_totalpopulation_aug <- augment(death_ambientairpol_totalpopulation$fit)
-#ggplot(death_ambientairpol_totalpopulation_aug, mapping = aes(x = .fitted, y = .std.resid)) +
-  #geom_point(alpha = 0.5) +
-  #geom_hline(yintercept = 0, color = "gray", lty = "dashed") +
-  #labs(x = "Predicted mercury (ppm)", y = "Residuals")
-
-#glance(death_ambientairpol_totalpopulation)$r.squared
+summary(modelagg1)
 ```
 
+Here we created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. (will add explanation later)
 
 ```{r ex14}
+Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
+
+modelagg2<-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration + Sex + Residencetype, data=ambient2, family = binomial)
+
+summary(modelagg2)
+```
+
+Finally we conducted a t-test to see if the impact on mortality is different depending on the type of air pollution (household vs. ambient)
+```{r ex15}
 t.test(Household_Air_Pollution_Rate$FactValueNumeric,Ambient_Air_Pollution_Rate$FactValueNumeric, var.equal = FALSE)
 ```
