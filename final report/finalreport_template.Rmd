@@ -5,7 +5,7 @@ author: "Kaitlyn Lewars and Katie Meehl: The Exposure Experience"
 date: "November 16, 2021"
 output: pdf_document
 ---
-```{r loadp&d, warning=FALSE, message=FALSE}
+```{r loadp&d, warning=FALSE, message=FALSE, echo=FALSE}
 library(tidyverse)
 library(readr)
 library(scales)
@@ -15,24 +15,24 @@ library(infer)
 install.packages("janitor")
 library(janitor)
 
-#Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
-#Household_Air_Pollution_Total_Deaths <- read_csv("~/Project #Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
-#Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
-#Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
-#Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
-#Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
+Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
+Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
 
-Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
-Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
-Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
-Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
-Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
-Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+# Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
+# Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
+# Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
+# Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
+# Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
+# Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
 ```
 
-Climate change has been a recurring topic in the news in recent years as it becomes a more pressing problem. One of the important factors of climate change is air pollution. In 2017, air pollution was the 4th leading cause of mortality and the 5th leading cause of morbidity worldwide. As air pollution is a leading cause of morbidity and mortality, we thought it would be important to explore a data set investigating this problem. 
+Climate change has been a recurring topic in the news in recent years as it becomes a more pressing problem. One of the important factors of climate change is air pollution. In 2017, air pollution was the 4th leading cause of mortality and the 5th leading cause of morbidity worldwide. As air pollution is a leading cause of morbidity and mortality, we thought it would be important to explore a data set investigating this problem. [Edit, add sources]
 
-In general we would like to investigate air pollution as a cause of mortality globally. There are several different types of air pollution, but we will look at household pollution and ambient matter pollution. With these two variables we will compare them to see which air pollution is the most fatal. We would also like to look into the trend of air pollution over the last 27 years. Lastly we would like to compare air pollution as a risk factor to other common risk factors. We downloaded this data from kaggle. There are several variables in this data including year, country, deaths by each type of air pollution, and deaths by other risk factors. 
+In general we would like to investigate air pollution as a cause of mortality globally. There are several different types of air pollution, but we will look at household pollution and ambient matter pollution. With these two variables we will compare them to see which air pollution is the most fatal. We would also like to look into the trend of air pollution over the last 27 years. Lastly we would like to compare air pollution as a risk factor to other common risk factors. We downloaded this data from the World Health Organization Data Collections. There are several variables in this data including year, country, deaths by each type of air pollution, and deaths by other risk factors. 
 
 The data collection is a bit complicated. In order to estimate deaths caused by pollution they use “mathematical functions, derived from epidemiological studies from countries around the world, that relate different levels of exposure to the increased risk of death or disability from each cause, by age and sex, where applicable, estimates of population exposure to PM2.5, ozone, and household air pollution, country-specific data on underlying rates of disease and death for each pollution-linked disease, and a comprehensive set of population data, adjusted to match the UN2015 Population Prospectus and obtained from the Gridded Population of the World (GPW) database for each country” (https://www.stateofglobalair.org/data/estimate-burden).
 
@@ -65,55 +65,12 @@ Total_Air_Pollution_Death_Rate %>%
        title = "Rates of Death due to Air Pollution in 2016")
 ```
 
-The four countries of interest are Democratic People's Republic of Korea, Georgia, Chad, and Bosnia and Herzegovina.
+The first thing we wanted to look at was the frequency of higher death rates due to the ambient and household air pollution. As seen in the first visualization showing the rates of death due to Ambient Air Pollution, there tends to be a great amount of countries that have death rates of around 25-30 out of every 100,000 in their population, with very few countries have less than 15 or greater than 75 deaths out of every 100,000. 
 
-[Insert graph for N. Korea, Georgia, Chad, Bos. and Herz.]
+This is much more alarming than the household air pollution death rates, which tend to center around 0 for most countries. However, this visualization also shows quite a few countries that have death rates between 50 and 100 deaths out of every 100,000. 
+Our third visualization shows the total deaths due to air pollution in selected countries around the globe in 2016. Here, we are able to see the sheer amount of countries that have had rates of roughly 50 up to roughly 150 deaths out of 100,000, indicating a serious global issue. 
 
-```{r Georgiatestgraphs}
-# These are the possible graphs I've made starter code for. I still need to work on them to get them to work but wanted to show you what I was talking about in terms of exploring these countries. Which graphs do you think we should use/would be most helpful in demonstrating effects of/comparison between air pollution? Any other graphs we should think about?
-
-# TRYING TO COMPARE RATES BELOW - Need to add x labels for countries
-#Total_Air_Pollution_Death_Rate %>%
-  #filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
-  #filter(Location %in% c("Georgia","Chad", "Democratic People's Republic of Korea","Bosnia and Herzegovina")) %>%
-  #ggplot(aes(x = FactValueNumeric)) +
-  #geom_histogram() +
-  #labs(x = "Rate of Death (out of 100,000)",
-       #y = "Frequency",
-       #title = "Rates of Death due to Air Pollution in 2016")
-
-
-#COMPARE COUNTRY WITHIN REGION - Need to make this work [not showing anything]
-#Total_Air_Pollution_Death_Rate %>%
-  #filter(ParentLocation=="Europe") %>%
-  #filter(Dim2=="Total", Dim1=="Both Sexes") %>%
-  ##ggplot(aes(x=FactValueNumeric)) +
-  #geom_histogram() +
-  #labs(x="Rate of Death (out of 100,000)", y="Frequency", title="Comparative Rates of Death due to Air Pollution", subtitle="Europe")
-
-# COMPARE BETWEEN SEXES
-#Total_Air_Pollution_Death_Rate %>%
-  #filter(Location %in% c("Georgia")) %>%
-  #filter(Dim2 == "Total") %>%
-  #ggplot(aes(x = FactValueNumeric, fill=Dim1)) +
- # geom_bar() +
-  #scale_x_continuous(labels = label_comma()) +
-  #labs(x = "Rate of Death (out of 100,000)",
-       #y = "Frequency",
-       #title = "Rates of Death due to Air Pollution in 2016")
-
-# COMPARE ILLNESS CAUSED - Need to make this work [Not showing anything]
-#Total_Air_Pollution_Death_Rate %>%
-  #filter(Location %in% c("Georgia")) %>%
-  #filter(Dim1=="Both Sexes") %>%
-  #ggplot(aes(x = FactValueNumeric, fill=Dim2)) +
-  #geom_bar() +
-  #scale_x_continuous(labels = label_comma()) +
-  #labs(x = "Rate of Death (out of 100,000)", y = "Frequency", title = "Rates of Death due to Air Pollution in 2016")
-
-```
-
-
+Out of these three plots, there are four countries that should be noted: Democratic People's Republic of Korea, Georgia, Chad, and Bosnia and Herzegovina. These countries are outliers and show much higher death rates due to air pollution than other countries. 
 
 ```{r ex2, warning=FALSE, message=FALSE}
 joinedambient1 <- Ambient_Air_Pollution_Rate %>%
@@ -138,21 +95,24 @@ ambient <- Particulate_Ambient_Concentration %>%
 filter(CauseofDeath == "Total", Sex == "Both sexes")
 ```
 
-[Evaluate, explain, need to edit scale for both axes]
+Here, we have created a new datatset to explore our discovery that ambient air pollution had a higher average death rate globally than household air pollution. This includes the total deaths due to to ambient pollution, the rates at which countries have had deaths due to ambient air pollution, ambient air concentration, and other factors which will help understand how ambient air pollution affect countries around the world. 
 
 ```{r ex4}
 ggplot(data = ambient, aes(x = log(Totaldeathsambient))) +
   geom_histogram() +
-  labs(x = "Total Deaths (log)", y = NULL)
+  labs(x = "Total Deaths (log)", y = NULL, title="Total Deaths (log) due to Ambient Pollution")
 ```
+[Insert explanation]
 
 ```{r ex5}
 ggplot(data = ambient, aes(x = log(AmbientAirConcentration), y = log(Totaldeathsambient))) +
 geom_point(alpha = 0.25) +
-labs(title = "Deaths as a function of Ambient Air Concentration",,
+labs(title = "Deaths as a function of Ambient Air Concentration",
 x = "Ambient Air Concentration (PM2.5)",
 y = "Total deaths from Ambient Air Pollution (log)")
 ```
+
+We want to explore the different factors affecting deaths due to ambient air pollution. A potential factor in the rise in environmental air pollution could be the concentration of air pollution. In the plot above, we examine the connection between total deaths from ambient air pollution vs. ambient air concentration in fine particulate matter, both of which are on a log scale for normalization of the data. Although slightly centered around the middle, the plot clearly shows a lack of strong relationship between these two variables, indicating that there are likely other factors influencing the data. 
 
 ```{r ex6, warning=FALSE, message=FALSE}
 ambient2 <- Particulate_Ambient_Concentration %>%
@@ -164,7 +124,7 @@ ambient2 <- Particulate_Ambient_Concentration %>%
 filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"), !Residencetype %in% c("Total"))
 ```
 
-[Evaluate, explain]
+[Explain]
 
 ```{r ex8}
 ggplot(data = ambient2, aes(x = log(totalpopulation), y = log(Totaldeathsambient))) +
