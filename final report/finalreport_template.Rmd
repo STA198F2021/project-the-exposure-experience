@@ -124,18 +124,17 @@ ambient2 <- Particulate_Ambient_Concentration %>%
 filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"), !Residencetype %in% c("Total"))
 ```
 
-[Explain]
-
 ```{r ex8}
 ggplot(data = ambient2, aes(x = log(totalpopulation), y = log(Totaldeathsambient))) +
 geom_point(alpha = 0.25) +
-  labs(title = "Deaths as a function of Population",,
+  labs(title = "Total Deaths due to Ambient Air Pollution based on Country Population",
         x = "Total Population (per country log)",
         y = "Total Deaths from Ambient Air Pollution (log)")
 ```
 
-For the next 4 sections we created two different models for a linear regression. The first one we did just based off the outdoor air concentration. The equation we got was deaths = -2601.0 + 274.1(AirConcentration). The air concentration is in PM2.5. 
+In continuing our exploration of which factors influence deaths and death rates from ambient air pollution, we compared the total deaths from ambient air pollution to the total population of the countries we selected to examine. Per the linear arrangement of points in the plot, there seems to be a strong relationship between the ambient air pollution deaths and the country population. This is likely because an increased population will naturally lead to a greater chance of citizens facing global health crisis. This also could be related to an increased amount and spread of ambient air pollution in larger countries which rely on greater usage of fossil fuels. 
 
+For the next 4 sections we created two different models for a linear regression. The first one we did just based off the outdoor air concentration. The equation we got was deaths = -2601.0 + 274.1(AirConcentration). The air concentration is in PM2.5, which is fine particulate matter. 
 
 ```{r ex9, warning=FALSE, message=FALSE}
 death_ambientairpol <- linear_reg() %>%
@@ -152,15 +151,17 @@ ggplot(data = ambient, aes(x = log(AmbientAirConcentration), y = log(Totaldeaths
   geom_point(alpha = 0.25) +
   geom_smooth(method = "lm", se = FALSE, color = "orange") +
   labs(title = "Deaths per Ambient Air Pollution Concentration",
-       x = "Ambient Air Pollution Concentration (Insert Units)",
+       x = "Ambient Air Pollution Concentration (PM2.5)",
        y = "Total Deaths due to Ambient Air Pollution")
 ```
-[Add narrative about the graph - most deaths are concentrated at mid concentrations - lethal dose, what are the outliers?]
 
 ```{r ex11, warning=FALSE, message=FALSE}
 glance(death_ambientairpol)$r.squared
 ```
 
+To further express that the simple linear model of ambient air pollution concentration in PM2.5 as a function of total deaths does not fit the data very well, we displayed the linear regression against the scatterplot data and determined the R-squared value. The linear regression, the orange line, clearly does not fit the data. Furthermore, the R-squared value is 0.039, meaning the model only explains 3.9% variance in the model. 
+
+We continue exploring related factors by creating a linear regression comparing total ambient air pollution deaths and ambient air concentration alongside other factors like sex, being female or male, and residence type, being urban or rural. 
 
 ```{r ex12, warning=FALSE, message=FALSE}
 death_ambientairpol_totalpopulation <- linear_reg() %>%
@@ -172,8 +173,10 @@ tidy(death_ambientairpol_totalpopulation, conf.int=TRUE, exponentiate=TRUE)
 glance(death_ambientairpol_totalpopulation)$r.squared
 ```
 
+Once again, this linear regression model fails to accurately predict the total ambient air pollution deaths. In fact, it was a R-squared value of 0.038, or explains only 3.8% of the data variance, which is worse. The variables here are not significant [show -values and confidence intervals].
 
-Here we created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration. (will add explanation later)
+Instead of continuing with linear regression models, we chose to create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration. (will add explanation later)
+
 ```{r ex13}
 Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
@@ -196,3 +199,5 @@ Finally we conducted a t-test to see if the impact on mortality is different dep
 ```{r ex15}
 t.test(Household_Air_Pollution_Rate$FactValueNumeric,Ambient_Air_Pollution_Rate$FactValueNumeric, var.equal = FALSE)
 ```
+
+[Interpret - good p-value and confidence interval]
