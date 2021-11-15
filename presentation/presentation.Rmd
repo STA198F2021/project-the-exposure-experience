@@ -57,6 +57,42 @@ style_xaringan(
   title_slide_background_image = "img/watercolour_sys02_img34_teacup-ocean.jpg"
 )
 ```
+
+#The topic
+We're looking at air pollution. What is air pollution and why should be care?
+
+---
+#Climate change!
+Explain climate change [sources?] and explain how it relates to air pollution
+
+---
+#Ambient air pollution
+As a function of air pollution
+
+---
+#Household air pollution
+We're also looking at this
+---
+#Given this background, our objective
+---
+#Dataset
+Glimpse datasets? At least explain them, look at them
+---
+#Graphs looking at the things
+Explain and go over them
+---
+#Population
+---
+#Deaths/air concentration graph
+---
+#Linear regressions
+---
+#Binomial Regressions
+---
+#T-test
+---
+#Conclusion/what we learned
+---
 [Should change the background image]
 
 class: inverse, middle, center
