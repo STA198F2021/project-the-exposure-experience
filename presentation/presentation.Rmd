@@ -38,213 +38,166 @@ knitr::opts_chunk$set(
 
 ```{r load-data, include=FALSE}
 # Load your data here
-Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
-Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
-Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
-Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
-Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
-Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
-# Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
-# Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
-# Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
-# Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
+Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+
+#Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
+#Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
+#Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
+#Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
 ```
 
 ```{r style-slides, echo = FALSE}
 style_xaringan(
-  title_slide_background_image = "img/watercolour_sys02_img34_teacup-ocean.jpg"
-)
+  title_slide_background_image = "img/watercolour_sys02_img34_teacup-ocean.jpg",
+  background_color = "#87CEFA")
 ```
 
-#The topic
-We're looking at air pollution. What is air pollution and why should be care?
+#Framing the Issue
+- Climate change is becoming a more apparent issue and one of the important factors is air pollution
+- Air pollution refers to the release of pollutants into the air
+- Varying effects on human body
+- 4th leading cause of mortality and the 5th leading cause of morbidity worldwide
+- Low and middle income countries suffering the most
+- Ambient air pollution and Household air pollution
 
 ---
-#Climate change!
-Explain climate change [sources?] and explain how it relates to air pollution
+#Research Question
+- Investigate air pollution as a cause of mortality globally 
+- Focus on two issues:
+    - If the level of ambient air pollution concentration is correlated with number of deaths in a population or likelihood of an individual dying 
+    - What type of air pollution has the most effect on mortality
 
----
-#Ambient air pollution
-As a function of air pollution
-
----
-#Household air pollution
-We're also looking at this
----
-#Given this background, our objective
 ---
 #Dataset
-Glimpse datasets? At least explain them, look at them
----
-#Graphs looking at the things
-Explain and go over them
+- We have 6 different data sets that we combined into three main data sets:
+    - Ambient Air Pollution (filtered for both sexes and residence type): Ambient air pollution death rate, gender, country, total deaths, residence type, and level of ambient air pollution
+    - Ambient Air Pollution 2 (filtered for males, females, urban, and rural)
+    - Household Air Pollution: Household air pollution death rate, gender, country, and total deaths by household air pollution
+
 ---
 #Population
+.pull-left[ As seen in the first visualization showing the rates of death due to Ambient Air Pollution, there tends to be a greater amount of countries that have death rates of around 25-30 out of every 100,000 in their population, with very few countries having less than 15 or greater than 75 deaths out of every 100,000.
+
+```{r plot-ambient, warning = FALSE, echo = FALSE, fig.width = 5, fig.height = 4}
+Ambient_Air_Pollution_Rate %>%
+  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  ggplot(aes(x = FactValueNumeric)) +
+  geom_histogram(binwidth = 10) +
+  geom_histogram(binwidth = 10, fig.width=5,fig.height=5) +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Ambient Air Pollution in 2016")
+```
+]
+.pull-right[This is much more alarming than household air pollution death rates, which tend to center a round 0 for most countries. However, this visualization also shows quite a few countries that have death rates between 50 and 100 deaths out of every 100,000.
+
+```{r plot-household, echo = FALSE, warning = FALSE, fig.width = 5, fig.height = 4}
+Household_Air_Pollution_Rate %>%
+  filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
+  ggplot(aes(x = FactValueNumeric)) +
+  geom_histogram(binwidth = 10) +
+  geom_histogram(binwidth = 10) +
+  scale_x_continuous(labels = label_comma()) +
+  labs(x = "Rate of Death (out of 100,000)",
+       y = "Frequency",
+       title = "Rates of Death due to Household Air Pollution in 2016")
+```
+]
 ---
-#Deaths/air concentration graph
----
-#Linear regressions
+#Confirmation through t-tests
+
+We conducted a paired t-test because the two types of pollution are coming from the same country and measuring the same outcome (deaths). We wanted to see if the two different types of air pollution had the same impact on mortality. We saw that they did not through the two sided paired t-test, but wanted to do a one sided t-test to see which type of air pollution had a greater effect on mortality. When we conducted the one sided t-test we saw that household air pollution
+had less of an effect on mortality than ambient air pollution. This was significant because the p-value was less than 0.05 and the mean was within the confidence interval for both t-tests.This goes along with our previous graphs where we noticed the alarming amount of deaths due to household air pollution.
+
+```{r ex2, warning=FALSE, message=FALSE, echo=FALSE}
+joinedambient1 <- Ambient_Air_Pollution_Rate %>%
+  rename(AmbientDeathRate = FactValueNumeric) %>%
+  rename(Sex = Dim1) %>%
+  rename(CauseofDeath = Dim2) %>%
+  select(Location, Sex, CauseofDeath, AmbientDeathRate) %>%
+  left_join(Ambient_Air_Pollution_Total_Deaths) %>%
+  select(Location, Sex, CauseofDeath, AmbientDeathRate, FactValueNumeric) %>%
+filter(CauseofDeath == "Total") %>%
+  mutate(totalpopulation = (100000*FactValueNumeric)/AmbientDeathRate) %>%
+  rename(Totaldeathsambient = FactValueNumeric)
+```
+
+```{r ex3, warning=FALSE, message=FALSE, echo=FALSE}
+ambient <- Particulate_Ambient_Concentration %>%
+  rename(AmbientAirConcentration = FactValueNumeric) %>%
+  select(Location, AmbientAirConcentration) %>%
+  left_join(joinedambient1, by = "Location") %>%
+  select(Location, Sex, CauseofDeath, AmbientDeathRate, Totaldeathsambient, AmbientAirConcentration, totalpopulation) %>%
+filter(CauseofDeath == "Total", Sex == "Both sexes")
+```
+
+```{r ex12, warning=FALSE, message=FALSE, echo=FALSE}
+household <- Household_Air_Pollution_Total_Deaths %>%
+  rename(Totaldeathshoushold = FactValueNumeric) %>%
+  select(Location, Totaldeathshoushold) %>%
+  left_join(ambient, by = "Location") %>%
+  select(Location, Sex, CauseofDeath, Totaldeathsambient, Totaldeathshoushold, totalpopulation) %>%
+  select(Location, Sex, CauseofDeath, Totaldeathsambient, Totaldeathshoushold, totalpopulation)%>%
+filter(CauseofDeath == "Total", Sex == "Both sexes")
+```
+
+
+```{r two-sided-t-test, echo = FALSE, warning = FALSE}
+t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "two.sided")
+```
+
+```{r one-sided-t-test, echo = FALSE, warning = FALSE}
+t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "less")
+```
 ---
 #Binomial Regressions
----
-#T-test
----
-#Conclusion/what we learned
----
-[Should change the background image]
 
-class: inverse, middle, center
+We created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. The resulting equation is:            - Likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type). 
+      - p-values for all 3 of these variables are less than alpha = 0.05 
+      - The odds ratio is within the confidence interval, so we reject the null hypothesis
+      - Ambient air concentration, sex and residential type are all related to dying 
+      - The odds ratio confirms that it is 1.1822 times more likely for males to die than females when the ambient air pollution concentration is 0 and they live in a rural community. 
+      - The odds ratio confirms that it is 0.9270 times more likely for someone living
+in a urban community to die than someone living in an rural community when the ambient air pollution concentration is 0 and they are a female
 
-# Using xaringan
+```{r ambient-2, echo = FALSE, warning = FALSE}
+ambient2 <- Particulate_Ambient_Concentration %>%
+  rename(AmbientAirConcentration = FactValueNumeric) %>%
+  rename(Residencetype = Dim1) %>%
+  select(Location, AmbientAirConcentration, Residencetype) %>%
+  left_join(joinedambient1, by = "Location") %>%
+  select(Location, Sex, CauseofDeath, AmbientDeathRate, Totaldeathsambient, AmbientAirConcentration, totalpopulation, Residencetype) %>%
+filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"), !Residencetype %in% c("Total"))
+```
 
----
+```{r}
+Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
-## xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
-
----
-
-## Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
----
-
-## Code
-
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+modelagg2<-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration + Sex + Residencetype, data=ambient2, family = binomial)
+summary(modelagg2)
+tidy(modelagg2, conf.int=TRUE, exponentiate=TRUE)
 ```
 
 ---
+#Limitations, Next Steps, and Conclusions: Oh My!
 
-## Plots
+- Household and ambient air pollution are likely highly correlated 
+      - Haven’t learned how to test and adjust for this so this could be affecting the results
+- Didn’t have the data for multiple years 
+- Next Steps:
+      - Correlation test and gather data from multiple years
+      - Gather some training data to test how well our model is predicting individuals
+- Conclusions:
+      - Air pollution has an impact on mortality
+      - Ambient air pollution has a greater effect on mortality than household air pollution. 
+      - It is more likely that an individual in an rural community to die due to air pollution than someone living in a urban community 
+      - It is more likely for a male to die than a female
 
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-penguins_modified <- penguins %>%
-  mutate(species = fct_other(species, keep = "Adelie"))
-```
-
-```{r plot-penguins, echo = FALSE, warning = FALSE, fig.alt = "Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all the others combined together. There is a relatively strong, positive relationship between the two variables. The Adelie penguins are clustered together but they don't exhibit a different trend than the rest of the penguins."}
-# Code hidden with echo = FALSE
-# Uses modified penguins dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(penguins_modified, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
-  geom_point() + 
-  theme_minimal()
-```
-
----
-
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-]
-
----
-
-class: inverse, middle, center
-
-# A new section...
-
----
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r penguins-table, echo = FALSE}
-kable(head(penguins), format = "html")
-```
-
----
-
-## Images
-
-```{r castle, echo = FALSE, out.width = "40%", fig.align = "center", fig.cap = "Image credit: Danielle Navarro, Percolate."}
-include_graphics("img/watercolour_sys02_img32_percolate.jpg")
-```
-
-Or you can also include a full page image. See next slide.
-
----
-
-background-image: url(img/watercolour_sys02_img32_percolate.jpg)
-
----
-
-## Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-class: inverse, middle, center
-
-# Wrap up
-
----
-
-## Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect the majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
