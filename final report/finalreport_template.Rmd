@@ -15,19 +15,12 @@ library(infer)
 install.packages("janitor")
 library(janitor)
 
-Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
-Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
-Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
-Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
-Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
-Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
-
-# Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
-# Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
-# Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
-# Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
+Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
 ```
 
 **Background and Significance**
@@ -45,7 +38,7 @@ The data collection is a bit complicated. In order to estimate deaths caused by 
 
 **Exploratory Data Analysis**
 
-```{r ex1, warning=FALSE, message=FALSE, echo=FALSE}
+```{r ex1, warning=FALSE, message=FALSE, echo=FALSE, fig.width = 5, fig.height = 4}
 Ambient_Air_Pollution_Rate %>%
   filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
   ggplot(aes(x = FactValueNumeric)) +
@@ -54,7 +47,9 @@ Ambient_Air_Pollution_Rate %>%
   labs(x = "Rate of Death (out of 100,000)",
        y = "Frequency",
        title = "Rates of Death due to Ambient Air Pollution in 2016")
+```
 
+```{r ex1.1, warning=FALSE, message=FALSE, echo=FALSE, fig.width = 5, fig.height = 4}
 Household_Air_Pollution_Rate %>%
   filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
   ggplot(aes(x = FactValueNumeric)) +
@@ -63,7 +58,9 @@ Household_Air_Pollution_Rate %>%
   labs(x = "Rate of Death (out of 100,000)",
        y = "Frequency",
        title = "Rates of Death due to Household Air Pollution in 2016")
+```
 
+```{r ex1.2, warning=FALSE, message=FALSE, echo=FALSE, fig.width = 5, fig.height = 4}
 Total_Air_Pollution_Death_Rate %>%
   filter(Dim2 == "Total", Dim1 == "Both sexes") %>%
   ggplot(aes(x = FactValueNumeric)) +
@@ -106,18 +103,22 @@ filter(CauseofDeath == "Total", Sex == "Both sexes")
 ```
 
 **Analytic Methods**
+
+Before we did any analysis we had to wrangle the data. We created three different data sets. Two of them focused on the ambient air pollution. In the first data set, ambient,  we filtered the data to only include location, sex, Cause of Death, Ambient air pollution death rate, total deaths from ambient air pollution, the concentration of ambient air pollution, and the total population. We then filtered this data to include "both sexes" from the sex variable and "total" from the cause of death variable. For the second data, ambient2, we used the same variables, but added residential type. This time we filtered out "both sexes" from the sex variable and "total" from residence type. Additionally we filtered this data to only include "total" from the cause of death variable. For the last data set, household, we did the same as our first data set where we selected the data to only include Location, Sex, Cause of Death, total deaths from ambient air pollution, total deaths from household air pollution, and the total population. These were the three data sets we used for this analysis.
+
 At first we wanted to try to create a linear model to predict how many individuals will die due to ambient air pollution. To do this we first had to check if the data was normal and if the data was independent. 
 
 Within this graph, we normalized the total deaths due to ambient air pollution using the log function. We did this to create a normal distribution, so we could do a linear regression. Before doing this our deaths were skewed towards the left.
 
-```{r ex4, warning=FALSE, message=FALSE, echo=FALSE}
+```{r ex4, warning=FALSE, message=FALSE, echo=FALSE, fig.width = 5, fig.height = 4}
 ggplot(data = ambient, aes(x = log(Totaldeathsambient))) +
   geom_histogram(fig.width=5,fig.height=5) +
   labs(x = "Total Deaths (log)", y = NULL, title="Total Deaths (log) due to Ambient Pollution")
 ```
+
 We want to explore the different factors affecting deaths due to ambient air pollution. A potential factor in the rise in environmental air pollution could be the concentration of air pollution. In the plot below, we examine the connection between total deaths from ambient air pollution vs. ambient air concentration in fine particulate matter, both of which are on a log scale for normalization of the data. Although slightly centered around the middle, the plot clearly shows a lack of strong relationship between these two variables, indicating that there are likely other factors influencing the data. 
 
-```{r ex5, warning=FALSE, message=FALSE, echo=FALSE}
+```{r ex5, warning=FALSE, message=FALSE, echo=FALSE, fig.width = 5, fig.height = 4}
 ggplot(data = ambient, aes(x = log(AmbientAirConcentration), y = log(Totaldeathsambient))) +
 geom_point(alpha = 0.25) +
 labs(title = "Deaths as a function of Ambient Air Concentration",
@@ -137,67 +138,69 @@ filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"), !Residencetype %in% c
 
 In continuing our exploration of which factors influence deaths and death rates from ambient air pollution, we compared the total deaths from ambient air pollution to the total population of the countries we selected to examine. Per the linear arrangement of points in the plot, there seems to be a strong relationship between the ambient air pollution deaths and the country population. This is likely because an increased population will naturally lead to a greater chance of citizens facing global health crisis. This also could be related to an increased amount and spread of ambient air pollution in larger countries which rely on greater usage of fossil fuels.
 
-```{r ex7, warning=FALSE, message=FALSE, echo=FALSE}
+```{r ex7, warning=FALSE, message=FALSE, echo=FALSE, fig.width = 6, fig.height = 4}
 ggplot(data = ambient2, aes(x = log(totalpopulation), y = log(Totaldeathsambient))) +
 geom_point(alpha = 0.25) +
-  labs(title = "Total Deaths due to Ambient Air Pollution based on Country Population",
+  labs(title = "Total Deaths due to Ambient Pollution based on Country Population",
         x = "Total Population (per country log)",
         y = "Total Deaths from Ambient Air Pollution (log)")
 ```
 
 For the next 2 sections we created two different models for a linear regression to predict the total number of deaths in a certain population. The first one we did just based off the outdoor air concentration. While the p-value is 6.29e-87 which is less than 0.05 and the confidence interval of [0.673, 0.819] which does not contain 0 indicates that the air concentration variable is significant, the r squared value indicates that the model is not a good fit for the data as the R-squared value is 0.039, meaning the model only explains 3.9% variance in the model.
 
-```{r ex8, warning=FALSE, message=FALSE}
+```{r ex8, warning=FALSE, message=FALSE, echo=FALSE}
 death_ambientairpol <- linear_reg() %>%
   set_engine("lm") %>%
   fit(log(Totaldeathsambient) ~ log(AmbientAirConcentration), data = ambient)
-  tidy(death_ambientairpol, conf.int=TRUE, exponentiate=TRUE)
-  glance(death_ambientairpol)$r.squared
+tidy(death_ambientairpol, conf.int = TRUE, exponentiate = TRUE)
+glance(death_ambientairpol)$r.squared
 ```
 
 We then tried to improve the linear regression model by adding two predictors, residence type and gender. The residence types could either be urban or rural, while gender was either female or male.
 
 Unfortunately, this linear regression model was also a bad fit for the data. The r-squared value was 0.038 so it only explains 3.8% of the data variance. Additionally the variables, gender and residence type, are not statistically significant as both of their p-values are greater then 0.05 and their confidence intervals contained 0. 
 
-```{r ex9, warning=FALSE, message=FALSE}
+```{r ex9, warning=FALSE, message=FALSE, echo=FALSE}
+install.packages("sjPlot")
+library(sjPlot)
+library(sjmisc)
+library(sjlabelled)
+
 death_ambientairpol_totalpopulation <- linear_reg() %>%
     set_engine("lm") %>%
     fit(log(Totaldeathsambient) ~ log(AmbientAirConcentration) + Sex + Residencetype, data = ambient2)
 
-tidy(death_ambientairpol_totalpopulation, conf.int=TRUE, exponentiate=TRUE)
-
+tidy(death_ambientairpol_totalpopulation, conf.int = TRUE, exponentiate = TRUE)
 glance(death_ambientairpol_totalpopulation)$r.squared
 ```
 
-Instead of continuing with linear regression models, we chose to create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration. We did this because the linear model was not predicting the data well as seen by r squared value of both linear models.
+Instead of continuing with linear regression models, we chose to create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration. We did this because the linear model was not predicting the data well as seen by r squared value of both linear models. For the binomial regression we made 4 assumptions: each observation falls into one of two categories called a success or failure, there is a fixed number of observations that is large, and the observations are all independent. By aggregating the data we created two categories of success and failure. There was a large fixed number of observations, we assume that the data was collected in a random fashion. We also proved earlier that the variables are independent of each other.
 
-Here we created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration. The resulting equation likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration). Because the p-value is less than alpha = 0.05 and the confidence interval not containing 1 as an expontetiated value indicate statistical significance and the odds ratio is within the confidence interval, we reject the null hypothesis and have enough evidence to say that ambient air concentration is related to dying. The odds ratio confirms that it is 1.0124 times more likely for individuals that experience ambient air concentration, specifically 1 PM2.5, to die than those who do not.
+Here we created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration. The resulting equation likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration). Because the p-value is less than alpha = 0.05 and the confidence interval not containing 1 as an expected value indicates statistical significance and the odds ratio is within the confidence interval, we reject the null hypothesis and have enough evidence to say that ambient air concentration is related to dying. The odds ratio confirms that it is 1.0124 times more likely for individuals that experience ambient air concentration, specifically 1 PM2.5, to die than those who do not.
 
-```{r ex10, warning=FALSE, message=FALSE}
+```{r ex10, warning=FALSE, message=FALSE, echo=FALSE}
 Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
 modelagg1<-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration, data=ambient2, family = binomial)
 
-summary(modelagg1)
-tidy(modelagg1, conf.int=TRUE, exponentiate=TRUE)
+tidy(modelagg1, conf.int = TRUE, exponentiate = TRUE)
+glance(modelagg1)$AIC
 ```
 
-Here we created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. The resulting equation is likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type). Because the p-values for all 3 of these variables are less than alpha = 0.05 and thus statistically significant, their confidence intervals don't include 1 as exponentiated values, and the odds ratio is within the confidence interval, we reject the null hypothesis and have enough evidence to say that ambient air concentration, sex and residential type are all related to dying from ambient air pollution. The odds ratio confirms that it is 1.1822 times more likely for males to die than females when the ambient air pollution concentration is 0 and they
-live in a rural community. The odds ratio confirms that it is 0.9270 times more likely for someone living in a urban community to die than someone living in an rural community when the ambient air pollution concentration is 0 and they are a female.
+Here we created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. The resulting equation is likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type). Because the p-values for all 3 of these variables are less than alpha = 0.05 and thus statistically significant, their confidence intervals don't include 1 as expected values, and the odds ratio is within the confidence interval, we reject the null hypothesis and have enough evidence to say that ambient air concentration, sex and residential type are all related to dying from ambient air pollution. The odds ratio confirms that it is 1.1822 times more likely for males to die than females when the ambient air pollution concentration and the residence type is held constant. The odds ratio confirms that it is 0.9270 times more likely for someone living in a urban community to die than someone living in an rural community when the ambient air pollution concentration and gender are held constant.
 
-```{r ex11, warning=FALSE, message=FALSE}
+```{r ex11, warning=FALSE, message=FALSE, echo=FALSE}
 Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
 modelagg2<-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration + Sex + Residencetype, data=ambient2, family = binomial)
 
-summary(modelagg2)
-tidy(modelagg2, conf.int=TRUE, exponentiate=TRUE)
+tidy(modelagg2, conf.int = TRUE, exponentiate = TRUE, AIC = TRUE)
+glance(modelagg2)$AIC
 ```
 
-While we cannot directly compare the models, we are concluding that the last model we made is the best one given the data we have. We are concluding this because the the two additional predictors we added are significant which likely means they are needed in addition to the air concentration graph. Also the AIC value in the second graph is smaller than the one in the first binomial regression, which indicates it is a better fit than the first model.
+While we cannot directly compare the models, we are concluding that the last model we made is the best one given the data we have. We are concluding this because the the two additional predictors we added are significant which likely means they are needed in addition to the air concentration graph. Also the AIC value in the second graph, 8551996, is smaller than the one in the first binomial regression,9122756, which indicates it is a better fit than the first model.
 
-Lastly we wanted to explore the difference in effects between the two different types of air pollution within our datasets, household and ambient air pollution. So we conducted a paired t-test because the two types of pollution are coming from the same country and measuring the same outcome (deaths). We wanted to see if the two different types of air pollution had the same impact on mortality. We saw that they did not through the two sided paired t-test, but wanted to do a one sided t-test to see which type of air pollution had a greater effect on mortality. When we conducted the one sided t-test we saw that household air pollution had less of an effect on mortality than ambient air pollution. This was significant because the p-value was less than 0.05 and the mean was within the confidence interval for both t-tests.This goes along with our
-earlier exploratory graphs where we noticed the alarming amount of deaths due to household air pollution. It is important to note that it is likely that these two predictors are highly correlated as it is impossible to ethically separate and test the effects of different air pollutants
+Lastly we wanted to explore the difference in effects between the two different types of air pollution within our datasets, household and ambient air pollution. So we conducted a paired t-test because the two types of pollution are coming from the same country and measuring the same outcome (deaths). We wanted to see if the two different types of air pollution had the same impact on mortality. We saw that they did not through the two sided paired t-test, but wanted to do a one sided t-test to see which type of air pollution had a greater effect on mortality. When we conducted the one sided t-test we saw that household air pollution had less of an effect on mortality than ambient air pollution. We saw this because the mean of the differences was -549.8942, meaning the "y" had a greater effect and in this case our "y" was ambient air pollution. This was significant because the p-value was less than 0.05 and the mean was within the confidence interval for both t-tests.This goes along with our earlier exploratory graphs where we noticed the alarming amount of deaths due to household air pollution. It is important to note that it is likely that these two predictors are highly correlated as it is impossible to ethically separate and test the effects of different air pollutants
 
 ```{r ex12, warning=FALSE, message=FALSE, echo=FALSE}
 household <- Household_Air_Pollution_Total_Deaths %>%
@@ -208,11 +211,11 @@ household <- Household_Air_Pollution_Total_Deaths %>%
 filter(CauseofDeath == "Total", Sex == "Both sexes")
 ```
 
-```{r ex13, warning=FALSE, message=FALSE}
+```{r ex13, warning=FALSE, message=FALSE, echo=FALSE}
 t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "two.sided")
 ```
 
-```{r ex14, warning=FALSE, message=FALSE}
+```{r ex14, warning=FALSE, message=FALSE, echo=FALSE}
 t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "less")
 ```
 
@@ -220,4 +223,13 @@ t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRU
 
 Through our analysis we have learned that ambient air pollution has an impact on mortality, furthermore we learned that ambient air pollution has a greater effect on mortality than household air pollution. This went along with our hypothesis made earlier. We also made a binomial regression model to predict the likelihood of a person dying due to ambient air pollution. This was a bit different than the original plan as we originally sought to create a model that would predict for the whole population. Through this regression model we found that it is more likely that an individual in an rural community to die due to air pollution than someone living in a urban community. We also found that a male is more likely to die than female.
 
-We did have a big limitation with the t-tests, which was that household and ambient air pollution are likely highly correlated. We haven't learned how to test and adjust for this so this could be affecting the results. Another limitation we encountered was that we didn't have the data for multiple years which we think would have been a great addition and would have allowed us to interpret trends in the effects of air pollution globally. In terms of next steps, we need to find a way to do a correlation test and perhaps gather data from multiple years. We should also gather some training data to test how well our model is predicting individuals. Finally, in the future, we can also begin examining specifically how ambient or household air pollution affects certain populations medically, example being what type of illness due to air pollution will be most prevalent population by gender or residence. This was not our original intention, but would now be possible knowing significant factors which affect air pollution death. 
+We did have a limitation with the t-tests, which was that household and ambient air pollution are likely highly correlated. We haven't learned how to test and adjust for this so this could be affecting the results. Another limitation we encountered was that we didn't have the data for multiple years which we think would have been a great addition and would have allowed us to interpret trends in the effects of air pollution globally. We created a binomial model for this data set, however since air pollution does not effect just one country or a small group of people a way to predict the deaths per country according to population size would be a useful model to create.
+
+In terms of next steps, we need to find a way to do a correlation test and perhaps gather data from multiple years. We should also gather some training data to test how well our model is predicting individuals. Finally, in the future, we can also begin examining specifically how ambient or household air pollution affects certain populations medically, example being what type of illness due to air pollution will be most prevalent population by gender or residence. This was not our original intention, but would now be possible knowing significant factors which affect air pollution death. 
+
+---
+                                        **Works cited**
+
+- World Health Organization. “Air Pollution.” World Health Organization, World Health Organization, 22 Sept. 2021, https://www.who.int/health-topics/air-pollution#tab=tab_1. 
+
+- State of Global Air. “State of Global Air.” How We Estimate Burden of Disease | State of Global Air, 2021, https://www.stateofglobalair.org/data/estimate-burden. 
