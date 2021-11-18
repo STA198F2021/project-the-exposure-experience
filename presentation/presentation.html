@@ -30,12 +30,28 @@ class: center, middle, inverse, title-slide
 
 
 #Framing the Issue
+
 - Climate change is becoming a more apparent issue and one of the important factors is air pollution
+
+--
+
 - Air pollution refers to the release of pollutants into the air
-- Varying effects on human body
-- 4th leading cause of mortality and the 5th leading cause of morbidity worldwide
-- Low and middle income countries suffering the most
+
+--
+
 - Ambient air pollution and Household air pollution
+
+--
+
+- Varying effects on human body
+
+--
+
+- 4th leading cause of mortality and the 5th leading cause of morbidity worldwide
+
+--
+
+- Low and middle income countries suffering the most
 
 .pull-left[
 &lt;img src="img/Ambient ap pic.jpeg" width="90%" /&gt;
@@ -50,14 +66,18 @@ class: center, middle, inverse, title-slide
     - If the level of ambient air pollution concentration is correlated with number of deaths in a population or likelihood of an individual dying 
     - What type of air pollution has the most effect on mortality
     
-&lt;img src="img/cartoon-air-pollution.jpeg" width="70%" height="20%" /&gt;
+&lt;img src="img/cartoon-air-pollution.jpeg" width="70%" height="10%" /&gt;
 
 ---
 #Dataset
 - We have 6 different data sets that we combined into three main data sets:
-    - Ambient Air Pollution (filtered for both sexes and residence type): Ambient air pollution death rate, gender, country, total deaths, residence type, and level of ambient air pollution
-    - Ambient Air Pollution 2 (filtered for males, females, urban, and rural)
-    - Household Air Pollution: Household air pollution death rate, gender, country, and total deaths by household air pollution
+    - Ambient Air Pollution
+         - Ambient air pollution death rate, gender, country, total deaths, residence type, and level of ambient air pollution
+         - Filtered for both sexes and residence type
+    - Ambient Air Pollution 2
+         - Filtered for males, females, urban, and rural
+    - Household Air Pollution
+         - Household air pollution death rate, gender, country, and total deaths by household air pollution
     
 ![WHO Logo](img/logo-who.jpeg)]
 
@@ -100,17 +120,10 @@ class: center, middle, inverse, title-slide
 ## p.value                  5.703782e-09  2.851891e-09
 ```
 
-
 ---
 #Binomial Regressions
-
-- Goal: Create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. 
-      - Likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type) 
-      - p-values for all 3 of these variables are less than alpha = 0.05 
-      - The odds ratio is within the confidence interval, so we reject the null hypothesis
-      - Ambient air concentration, sex and residential type are all related to dying 
-      - It is 1.1822 times more likely for males to die than females when the ambient air pollution concentration and the residence type is held constant 
-      - It is 0.9270 times more likely for someone living in a urban community to die than someone living in an rural community when the ambient air pollution concentration and gender are held constant
+- Goal: Create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live.
+--
 
 
 
@@ -127,21 +140,29 @@ class: center, middle, inverse, title-slide
 ```
 ## [1] 8551996
 ```
+--
+`$$Likelihoodofdying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type)$$`
+--
+
+- p-values for all 3 of these variables are less than alpha = 0.05
+- The odds ratio is within the confidence interval, so we reject the null hypothesis
+- Ambient air concentration, sex and residential type are all related to dying
+- It is 1.1822 times more likely for males to die than females when the ambient air pollution concentration and the residence type is held constant 
+- It is 0.9270 times more likely for someone living in a urban community to die than someone living in an rural community when the ambient air pollution concentration and gender are held constant
 
 ---
-#Limitations, Next Steps, and Conclusions: Oh My!
-
-- Household and ambient air pollution are likely highly correlated 
-      - Haven’t learned how to test and adjust for this so this could be affecting the results
+#Limitations, Next Steps, and Conclusions
+###Conclusions:
+- Air pollution has an impact on mortality
+- Ambient air pollution has a greater effect on mortality than household air pollution. 
+- It is more likely that an individual in an rural community to die due to air pollution than someone living in a urban community 
+- It is more likely for a male to die than a female
+###Limitations:
+- Household and ambient air pollution are likely highly correlated, but haven’t learned how to test and adjust for this so this could be affecting the results
 - Didn’t have the data for multiple years 
-- Next Steps:
-      - Correlation test and gather data from multiple years
-      - Gather some training data to test how well our model is predicting individuals
-- Conclusions:
-      - Air pollution has an impact on mortality
-      - Ambient air pollution has a greater effect on mortality than household air pollution. 
-      - It is more likely that an individual in an rural community to die due to air pollution than someone living in a urban community 
-      - It is more likely for a male to die than a female
+###Next Steps
+- Correlation test and gather data from multiple years
+- Gather some training data to test how well our model is predicting individuals
 
 ---
 #Sources
