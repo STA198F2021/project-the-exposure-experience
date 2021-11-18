@@ -4,7 +4,7 @@
     <title>The Exposure Experience</title>
     <meta charset="utf-8" />
     <meta name="author" content="The Exposure Experience Team   Kaitlyn Lewars &amp; Katie Meehl" />
-    <meta name="date" content="2021-11-16" />
+    <meta name="date" content="2021-11-17" />
     <script src="libs/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## The Effects and Comparison of Global Air Pollution Types
 ### The Exposure Experience Team <br> Kaitlyn Lewars &amp; Katie Meehl
 ### Duke University
-### 2021-11-16
+### 2021-11-17
 
 ---
 
@@ -117,55 +117,6 @@ in a urban community to die than someone living in an rural community when the a
 
 
 
-```r
-Alive &lt;- ambient2$totalpopulation - ambient2$Totaldeathsambient
-
-modelagg2&lt;-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration + Sex + Residencetype, data=ambient2, family = binomial)
-summary(modelagg2)
-```
-
-```
-## 
-## Call:
-## glm(formula = cbind(round(Totaldeathsambient), round(Alive)) ~ 
-##     AmbientAirConcentration + Sex + Residencetype, family = binomial, 
-##     data = ambient2)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -143.52   -12.84    -3.78     0.17   347.88  
-## 
-## Coefficients:
-##                           Estimate Std. Error  z value Pr(&gt;|z|)    
-## (Intercept)             -8.058e+00  3.130e-04 -25742.6   &lt;2e-16 ***
-## AmbientAirConcentration  1.261e-02  5.509e-06   2288.9   &lt;2e-16 ***
-## SexMale                  1.674e-01  2.427e-04    689.6   &lt;2e-16 ***
-## ResidencetypeUrban      -7.582e-02  2.458e-04   -308.4   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 14254994  on 13175  degrees of freedom
-## Residual deviance:  8452356  on 13172  degrees of freedom
-## AIC: 8551996
-## 
-## Number of Fisher Scoring iterations: 4
-```
-
-```r
-tidy(modelagg2, conf.int=TRUE, exponentiate=TRUE)
-```
-
-```
-## # A tibble: 4 × 7
-##   term                    estimate  std.error statistic p.value conf.low conf.high
-##   &lt;chr&gt;                      &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-## 1 (Intercept)             0.000317 0.000313     -25743.       0 0.000316  0.000317
-## 2 AmbientAirConcentration 1.01     0.00000551     2289.       0 1.01      1.01    
-## 3 SexMale                 1.18     0.000243        690.       0 1.18      1.18    
-## 4 ResidencetypeUrban      0.927    0.000246       -308.       0 0.927     0.927
-```
 
 ---
 #Limitations, Next Steps, and Conclusions: Oh My!
