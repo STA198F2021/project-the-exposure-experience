@@ -20,9 +20,9 @@ output:
 # Remove any packages from this list that you're not using
 library(tidyverse)
 library(tidymodels)
-library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(readr)
 ```
 
 ```{r setup, include=FALSE}
@@ -37,19 +37,19 @@ knitr::opts_chunk$set(
 ```
 
 ```{r load-data, include=FALSE}
-# Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
-# Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
-# Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
-# Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
+Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
 
-Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
-Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
-Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
-Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
-Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
-Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
+#Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
+#Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
+#Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
+#Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
 ```
 
 ```{r style-slides, echo = FALSE}
@@ -65,12 +65,26 @@ style_xaringan(
 - Low and middle income countries suffering the most
 - Ambient air pollution and Household air pollution
 
+.pull-left[
+```{r img1, out.width ="90%", echo=FALSE, message=FALSE, warning=FALSE}
+img1_path <- "img/Ambient ap pic.jpeg"
+include_graphics(img1_path)
+```
+]
+.pull-right[
+![Household Air Pollution](img/Household ap pic.jpeg)]
+
 ---
 #Research Question
 - Investigate air pollution as a cause of mortality globally 
 - Focus on two issues:
     - If the level of ambient air pollution concentration is correlated with number of deaths in a population or likelihood of an individual dying 
     - What type of air pollution has the most effect on mortality
+    
+```{r img2, out.height= "20%", echo=FALSE, message=FALSE, warning=FALSE}
+img2_path <- "img/cartoon-air-pollution.jpeg"
+include_graphics(img2_path)
+```
 
 ---
 #Dataset
@@ -78,6 +92,8 @@ style_xaringan(
     - Ambient Air Pollution (filtered for both sexes and residence type): Ambient air pollution death rate, gender, country, total deaths, residence type, and level of ambient air pollution
     - Ambient Air Pollution 2 (filtered for males, females, urban, and rural)
     - Household Air Pollution: Household air pollution death rate, gender, country, and total deaths by household air pollution
+    
+![WHO Logo](img/logo-who.jpeg)]
 
 ---
 #Population
@@ -112,8 +128,12 @@ Household_Air_Pollution_Rate %>%
 ---
 #Confirmation through t-tests
 
-We conducted a paired t-test because the two types of pollution are coming from the same country and measuring the same outcome (deaths). We wanted to see if the two different types of air pollution had the same impact on mortality. We saw that they did not through the two sided paired t-test, but wanted to do a one sided t-test to see which type of air pollution had a greater effect on mortality. When we conducted the one sided t-test we saw that household air pollution
-had less of an effect on mortality than ambient air pollution. This was significant because the p-value was less than 0.05 and the mean was within the confidence interval for both t-tests.This goes along with our previous graphs where we noticed the alarming amount of deaths due to household air pollution.
+- Goal: To see if the two different types of air pollution had the same impact on mortality and if not which had a larger impact
+- We conducted two paired t-tests (one sided and two sided) 
+    - Two types of pollution are coming from the same country and measuring the same outcome (deaths)  
+    - The two-sided paired t-test confirmed that they had different impacts on mortality
+    - The one-sided t-test showed that household air pollution had less of an effect on mortality than ambient air pollution 
+    - Goes along with our previous graphs where we noticed the alarming amount of deaths due to ambient air pollution
 
 ```{r ex2, warning=FALSE, message=FALSE, echo=FALSE}
 joinedambient1 <- Ambient_Air_Pollution_Rate %>%
@@ -147,25 +167,35 @@ household <- Household_Air_Pollution_Total_Deaths %>%
 filter(CauseofDeath == "Total", Sex == "Both sexes")
 ```
 
-
 ```{r two-sided-t-test, echo = FALSE, warning = FALSE}
-t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "two.sided")
+tests <- list()
+tests[[1]] <- t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "two.sided")
 ```
 
 ```{r one-sided-t-test, echo = FALSE, warning = FALSE}
-t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "less")
+tests[[2]] <- t.test(household$Totaldeathshoushold, household$Totaldeathsambient, paired = TRUE, alternative = "less")
 ```
+
+```{r ttesttable, echo = FALSE, warning = FALSE}
+sapply(tests, function(x) {
+     c(x$estimate[1],
+       ci.lower = x$conf.int[1],
+       ci.upper = x$conf.int[2],
+       p.value = x$p.value)
+})
+```
+
+
 ---
 #Binomial Regressions
 
-We created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. The resulting equation is:            - Likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type). 
+- Goal: Create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. 
+      - Likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type) 
       - p-values for all 3 of these variables are less than alpha = 0.05 
       - The odds ratio is within the confidence interval, so we reject the null hypothesis
       - Ambient air concentration, sex and residential type are all related to dying 
-      - The odds ratio confirms that it is 1.1822 times more likely for males to die than females when the ambient air pollution concentration is 0 and they live in a rural community. 
-      - The odds ratio confirms that it is 0.9270 times more likely for someone living
-in a urban community to die than someone living in an rural community when the ambient air pollution concentration is 0 and they are a female
-
+      - It is 1.1822 times more likely for males to die than females when the ambient air pollution concentration and the residence type is held constant 
+      - It is 0.9270 times more likely for someone living in a urban community to die than someone living in an rural community when the ambient air pollution concentration and gender are held constant
 ```{r ambient-2, echo = FALSE, warning = FALSE}
 ambient2 <- Particulate_Ambient_Concentration %>%
   rename(AmbientAirConcentration = FactValueNumeric) %>%
@@ -180,8 +210,8 @@ filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"), !Residencetype %in% c
 Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
 modelagg2<-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration + Sex + Residencetype, data=ambient2, family = binomial)
-summary(modelagg2)
-tidy(modelagg2, conf.int=TRUE, exponentiate=TRUE)
+tidy(modelagg2, conf.int = TRUE, exponentiate = TRUE)
+glance(modelagg2)$AIC
 ```
 
 ---
@@ -201,5 +231,15 @@ tidy(modelagg2, conf.int=TRUE, exponentiate=TRUE)
 
 ---
 #Sources
+World Health Organization. “Air Pollution.” World Health Organization, World Health Organization, 22 Sept. 2021, https://www.who.int/health-topics/air-pollution#tab=tab_1. 
+
+State of Global Air. “State of Global Air.” How We Estimate Burden of Disease | State of Global Air, 2021, https://www.stateofglobalair.org/data/estimate-burden.
+
 #Image Sources
 https://www.europeanscientist.com/en/environment/urban-pollution-is-having-cascading-effects-on-plant-and-insect-ecosystems/
+https://www.youtube.com/watch?v=yp4MiprLRrQ
+https://www.miskawaanhealth.com/air-pollution-health-effects/
+https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.who.int%2F&psig=AOvVaw3BPnwS75ov9F4jROlTyOr1&ust=1637307599388000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCOi0-am0ofQCFQAAAAAdAAAAABAD
+https://www.everydayhealth.com/type-2-diabetes/is-there-a-link-between-type-2-diabetes-and-air-pollution/
+https://www.who.int/
+

@@ -4,7 +4,7 @@
     <title>The Exposure Experience</title>
     <meta charset="utf-8" />
     <meta name="author" content="The Exposure Experience Team   Kaitlyn Lewars &amp; Katie Meehl" />
-    <meta name="date" content="2021-11-17" />
+    <meta name="date" content="2021-11-18" />
     <script src="libs/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## The Effects and Comparison of Global Air Pollution Types
 ### The Exposure Experience Team <br> Kaitlyn Lewars &amp; Katie Meehl
 ### Duke University
-### 2021-11-17
+### 2021-11-18
 
 ---
 
@@ -37,12 +37,20 @@ class: center, middle, inverse, title-slide
 - Low and middle income countries suffering the most
 - Ambient air pollution and Household air pollution
 
+.pull-left[
+&lt;img src="img/Ambient ap pic.jpeg" width="90%" /&gt;
+]
+.pull-right[
+![Household Air Pollution](img/Household ap pic.jpeg)]
+
 ---
 #Research Question
 - Investigate air pollution as a cause of mortality globally 
 - Focus on two issues:
     - If the level of ambient air pollution concentration is correlated with number of deaths in a population or likelihood of an individual dying 
     - What type of air pollution has the most effect on mortality
+    
+&lt;img src="img/cartoon-air-pollution.jpeg" width="70%" height="20%" /&gt;
 
 ---
 #Dataset
@@ -50,6 +58,8 @@ class: center, middle, inverse, title-slide
     - Ambient Air Pollution (filtered for both sexes and residence type): Ambient air pollution death rate, gender, country, total deaths, residence type, and level of ambient air pollution
     - Ambient Air Pollution 2 (filtered for males, females, urban, and rural)
     - Household Air Pollution: Household air pollution death rate, gender, country, and total deaths by household air pollution
+    
+![WHO Logo](img/logo-who.jpeg)]
 
 ---
 #Population
@@ -64,8 +74,15 @@ class: center, middle, inverse, title-slide
 ---
 #Confirmation through t-tests
 
-We conducted a paired t-test because the two types of pollution are coming from the same country and measuring the same outcome (deaths). We wanted to see if the two different types of air pollution had the same impact on mortality. We saw that they did not through the two sided paired t-test, but wanted to do a one sided t-test to see which type of air pollution had a greater effect on mortality. When we conducted the one sided t-test we saw that household air pollution
-had less of an effect on mortality than ambient air pollution. This was significant because the p-value was less than 0.05 and the mean was within the confidence interval for both t-tests.This goes along with our previous graphs where we noticed the alarming amount of deaths due to household air pollution.
+- Goal: To see if the two different types of air pollution had the same impact on mortality and if not which had a larger impact
+- We conducted two paired t-tests (one sided and two sided) 
+    - Two types of pollution are coming from the same country and measuring the same outcome (deaths)  
+    - The two-sided paired t-test confirmed that they had different impacts on mortality
+    - The one-sided t-test showed that household air pollution had less of an effect on mortality than ambient air pollution 
+    - Goes along with our previous graphs where we noticed the alarming amount of deaths due to ambient air pollution
+
+
+
 
 
 
@@ -76,47 +93,40 @@ had less of an effect on mortality than ambient air pollution. This was signific
 
 
 ```
-## 
-## 	Paired t-test
-## 
-## data:  household$Totaldeathshoushold and household$Totaldeathsambient
-## t = -5.8255, df = 174959, p-value = 5.704e-09
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -734.9047 -364.8837
-## sample estimates:
-## mean of the differences 
-##               -549.8942
+##                                  [,1]          [,2]
+## mean of the differences -5.498942e+02 -5.498942e+02
+## ci.lower                -7.349047e+02          -Inf
+## ci.upper                -3.648837e+02 -3.946288e+02
+## p.value                  5.703782e-09  2.851891e-09
 ```
 
 
-```
-## 
-## 	Paired t-test
-## 
-## data:  household$Totaldeathshoushold and household$Totaldeathsambient
-## t = -5.8255, df = 174959, p-value = 2.852e-09
-## alternative hypothesis: true difference in means is less than 0
-## 95 percent confidence interval:
-##       -Inf -394.6288
-## sample estimates:
-## mean of the differences 
-##               -549.8942
-```
 ---
 #Binomial Regressions
 
-We created a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. The resulting equation is:            - Likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type). 
+- Goal: Create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live. 
+      - Likelihood of dying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type) 
       - p-values for all 3 of these variables are less than alpha = 0.05 
       - The odds ratio is within the confidence interval, so we reject the null hypothesis
       - Ambient air concentration, sex and residential type are all related to dying 
-      - The odds ratio confirms that it is 1.1822 times more likely for males to die than females when the ambient air pollution concentration is 0 and they live in a rural community. 
-      - The odds ratio confirms that it is 0.9270 times more likely for someone living
-in a urban community to die than someone living in an rural community when the ambient air pollution concentration is 0 and they are a female
+      - It is 1.1822 times more likely for males to die than females when the ambient air pollution concentration and the residence type is held constant 
+      - It is 0.9270 times more likely for someone living in a urban community to die than someone living in an rural community when the ambient air pollution concentration and gender are held constant
 
 
 
+```
+## # A tibble: 4 × 7
+##   term                    estimate  std.error statistic p.value conf.low conf.high
+##   &lt;chr&gt;                      &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)             0.000317 0.000313     -25743.       0 0.000316  0.000317
+## 2 AmbientAirConcentration 1.01     0.00000551     2289.       0 1.01      1.01    
+## 3 SexMale                 1.18     0.000243        690.       0 1.18      1.18    
+## 4 ResidencetypeUrban      0.927    0.000246       -308.       0 0.927     0.927
+```
 
+```
+## [1] 8551996
+```
 
 ---
 #Limitations, Next Steps, and Conclusions: Oh My!
@@ -132,6 +142,20 @@ in a urban community to die than someone living in an rural community when the a
       - Ambient air pollution has a greater effect on mortality than household air pollution. 
       - It is more likely that an individual in an rural community to die due to air pollution than someone living in a urban community 
       - It is more likely for a male to die than a female
+
+---
+#Sources
+World Health Organization. “Air Pollution.” World Health Organization, World Health Organization, 22 Sept. 2021, https://www.who.int/health-topics/air-pollution#tab=tab_1. 
+
+State of Global Air. “State of Global Air.” How We Estimate Burden of Disease | State of Global Air, 2021, https://www.stateofglobalair.org/data/estimate-burden.
+
+#Image Sources
+https://www.europeanscientist.com/en/environment/urban-pollution-is-having-cascading-effects-on-plant-and-insect-ecosystems/
+https://www.youtube.com/watch?v=yp4MiprLRrQ
+https://www.miskawaanhealth.com/air-pollution-health-effects/
+https://www.google.com/url?sa=i&amp;url=https%3A%2F%2Fwww.who.int%2F&amp;psig=AOvVaw3BPnwS75ov9F4jROlTyOr1&amp;ust=1637307599388000&amp;source=images&amp;cd=vfe&amp;ved=0CAsQjRxqFwoTCOi0-am0ofQCFQAAAAAdAAAAABAD
+https://www.everydayhealth.com/type-2-diabetes/is-there-a-link-between-type-2-diabetes-and-air-pollution/
+https://www.who.int/
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
