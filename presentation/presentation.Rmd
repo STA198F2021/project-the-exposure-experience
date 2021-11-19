@@ -116,7 +116,7 @@ include_graphics(img2_path)
 ![WHO Logo](img/logo-who.jpeg)]
 
 ---
-#Population
+#Exploratory Graphs
 .pull-left[ As seen in the first visualization showing the rates of death due to Ambient Air Pollution, there tends to be a greater amount of countries that have death rates of around 25-30 out of every 100,000 in their population, with very few countries having less than 15 or greater than 75 deaths out of every 100,000.
 
 ```{r plot-ambient, warning = FALSE, echo = FALSE, fig.width = 5, fig.height = 4}
