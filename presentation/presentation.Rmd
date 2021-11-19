@@ -37,19 +37,19 @@ knitr::opts_chunk$set(
 ```
 
 ```{r load-data, include=FALSE}
-# Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
-# Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
-# Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
-# Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
-# Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
+ Total_Air_Pollution_Death_Rate <- read_csv("~/R/Project Proposal/data/Total Air Pollution Death Rate.csv")
+Household_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Household Air Pollution Total Deaths.csv")
+Household_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/Household Air Pollution Rate.csv")
+Ambient_Air_Pollution_Rate <- read_csv("~/R/Project Proposal/data/WHO Ambient Air Pollution Rate.csv")
+Ambient_Air_Pollution_Total_Deaths <- read_csv("~/R/Project Proposal/data/Ambient Air Pollution Total Deaths.csv")
+Particulate_Ambient_Concentration <- read_csv("~/R/Project Proposal/data/Ambient Particulate Concentration.csv")
 
-Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
-Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
-Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
-Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
-Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
-Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
+#Total_Air_Pollution_Death_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Total Air Pollution Death Rate.csv")
+#Household_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Total Deaths.csv")
+#Household_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Household Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Rate <- read_csv("~/Project Proposal/project-the-exposure-experience/data/WHO Ambient Air Pollution Rate.csv")
+#Ambient_Air_Pollution_Total_Deaths <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Air Pollution Total Deaths.csv")
+#Particulate_Ambient_Concentration <- read_csv("~/Project Proposal/project-the-exposure-experience/data/Ambient Particulate Concentration.csv")
 ```
 
 ```{r style-slides, echo = FALSE}
@@ -60,25 +60,10 @@ style_xaringan(
 #Framing the Issue
 
 - Climate change is becoming a more apparent issue and one of the important factors is air pollution
-
---
-
 - Air pollution refers to the release of pollutants into the air
-
---
-
 - Ambient air pollution and Household air pollution
-
---
-
 - Varying effects on human body
-
---
-
 - 4th leading cause of mortality and the 5th leading cause of morbidity worldwide
-
---
-
 - Low and middle income countries suffering the most
 
 .pull-left[
@@ -97,14 +82,14 @@ include_graphics(img1_path)
     - If the level of ambient air pollution concentration is correlated with number of deaths in a population or likelihood of an individual dying 
     - What type of air pollution has the most effect on mortality
     
-```{r img2, out.height= "10%", echo=FALSE, message=FALSE, warning=FALSE}
+```{r img2, out.height= "10%", out.width= "50%", fig.align='center', echo=FALSE, message=FALSE, warning=FALSE}
 img2_path <- "img/cartoon-air-pollution.jpeg"
 include_graphics(img2_path)
 ```
 
 ---
 #Dataset
-- We have 6 different data sets that we combined into three main data sets:
+- We combined 6 different data into three main data sets:
     - Ambient Air Pollution
          - Ambient air pollution death rate, gender, country, total deaths, residence type, and level of ambient air pollution
          - Filtered for both sexes and residence type
@@ -112,11 +97,14 @@ include_graphics(img2_path)
          - Filtered for males, females, urban, and rural
     - Household Air Pollution
          - Household air pollution death rate, gender, country, and total deaths by household air pollution
-    
-![WHO Logo](img/logo-who.jpeg)]
+
+```{r img3, out.height= "60%", out.width= "60%", fig.align='center', echo=FALSE, message=FALSE, warning=FALSE}
+img3_path <- "img/logo-who.jpeg"
+include_graphics(img3_path)
+```
 
 ---
-#Population
+#Exploratory Graphs
 .pull-left[ As seen in the first visualization showing the rates of death due to Ambient Air Pollution, there tends to be a greater amount of countries that have death rates of around 25-30 out of every 100,000 in their population, with very few countries having less than 15 or greater than 75 deaths out of every 100,000.
 
 ```{r plot-ambient, warning = FALSE, echo = FALSE, fig.width = 5, fig.height = 4}
@@ -155,7 +143,7 @@ Household_Air_Pollution_Rate %>%
     - The one-sided t-test showed that household air pollution had less of an effect on mortality than ambient air pollution 
     - Goes along with our previous graphs where we noticed the alarming amount of deaths due to ambient air pollution
 
-```{r ex2, warning=FALSE, message=FALSE, echo=FALSE}
+```{r ex2, fig.align='center', warning=FALSE, message=FALSE, echo=FALSE}
 joinedambient1 <- Ambient_Air_Pollution_Rate %>%
   rename(AmbientDeathRate = FactValueNumeric) %>%
   rename(Sex = Dim1) %>%
@@ -208,7 +196,6 @@ sapply(tests, function(x) {
 ---
 #Binomial Regressions
 - Goal: Create a binomial regression model to predict the likelihood of a person dying based on the level of ambient air concentration, gender, and where they live.
---
 ```{r ambient-2, echo = FALSE, warning = FALSE}
 ambient2 <- Particulate_Ambient_Concentration %>%
   rename(AmbientAirConcentration = FactValueNumeric) %>%
@@ -219,38 +206,32 @@ ambient2 <- Particulate_Ambient_Concentration %>%
 filter(CauseofDeath == "Total", !Sex %in% c("Both sexes"), !Residencetype %in% c("Total"))
 ```
 
-```{r alive, echo=FALSE, warning=FALSE}
+```{r alive, fig.align='center', echo=FALSE, warning=FALSE}
 Alive <- ambient2$totalpopulation - ambient2$Totaldeathsambient
 
 modelagg2<-glm(cbind(round(Totaldeathsambient), round(Alive)) ~ AmbientAirConcentration + Sex + Residencetype, data=ambient2, family = binomial)
 tidy(modelagg2, conf.int = TRUE, exponentiate = TRUE, format="html")
 glance(modelagg2)$AIC
 ```
---
 $$Likelihoodofdying = 0.0003 + 1.0124(Ambient Air Concentration) + 1.1822(Sex) + 0.9270(Residence Type)$$
---
-
-- p-values for all 3 of these variables are less than alpha = 0.05
-- The odds ratio is within the confidence interval, so we reject the null hypothesis
-- Ambient air concentration, sex and residential type are all related to dying
-- It is 1.1822 times more likely for males to die than females when the ambient air pollution concentration and the residence type is held constant 
-- It is 0.9270 times more likely for someone living in a urban community to die than someone living in an rural community when the ambient air pollution concentration and gender are held constant
+- We reject the null hypothesis and conclude ambient air concentration, sex, and residential type are related to mortality
+    - p-values are less than alpha = 0.05 and the odds ratio is within the confidence interval
+- It is 1.1822 times more likely for males to die than females when the other predictors are held constant 
+- It is 0.9270 times more likely for someone living in a urban area to die than someone living in an rural area when the other predictors are held constant
 
 ---
 #Limitations, Next Steps, and Conclusions
-Conclusions:
-- Air pollution has an impact on mortality
-- Ambient air pollution has a greater effect on mortality than household air pollution. 
-- It is more likely that an individual in an rural community to die due to air pollution than someone living in a urban community 
-- It is more likely for a male to die than a female
---
-Limitations:
-- Household and ambient air pollution are likely highly correlated, but haven’t learned how to test and adjust for this so this could be affecting the results
-- Didn’t have the data for multiple years 
---
-Next Steps:
-- Correlation test and gather data from multiple years
-- Gather some training data to test how well our model is predicting individuals
+- Conclusions:
+    - Air pollution has an impact on mortality
+    - Ambient air pollution has a greater effect on mortality than household air pollution. 
+    - It is more likely that an individual in an rural community to die due to air pollution than someone living in a urban community 
+    - It is more likely for a male to die than a female
+- Limitations:
+    - Household and ambient air pollution are likely highly correlated, but haven’t learned how to test and adjust for this so this could be affecting the results
+    - Didn’t have the data for multiple years 
+- Next Steps:
+    - Correlation test and gather data from multiple years
+    - Gather some training data to test how well our model is predicting individuals
 
 ---
 #Sources
